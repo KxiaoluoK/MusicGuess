@@ -103,9 +103,9 @@ for file in "${files[@]}"; do
 
         echo "      #$i → ${start}秒处 → $clip_name"
 
-        # ffmpeg 裁剪（-acodec copy 无损且快速）
+        # ffmpeg 裁剪（剥离原始元数据，避免播放器显示错误的曲目标题）
         ffmpeg -y -v quiet -ss "$start" -t "$CLIP_DURATION" -i "$file" \
-               -acodec libmp3lame -ab 128k -ar 44100 -ac 2 "$clip_path" 2>/dev/null
+               -map_metadata -1 -acodec libmp3lame -ab 128k -ar 44100 -ac 2 "$clip_path" 2>/dev/null
 
         if [ -f "$clip_path" ]; then
             clip_size=$(du -h "$clip_path" | cut -f1)
