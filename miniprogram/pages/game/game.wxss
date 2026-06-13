@@ -1,0 +1,448 @@
+/* ==================== 整体布局 ==================== */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+}
+
+.screen {
+  min-height: 100vh;
+  padding: 40rpx 32rpx;
+  box-sizing: border-box;
+}
+
+/* ==================== 开始界面 ==================== */
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48rpx;
+}
+
+.logo-area {
+  text-align: center;
+}
+
+.logo-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12rpx); }
+}
+
+.logo-title {
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12rpx;
+  letter-spacing: 4rpx;
+}
+
+.logo-subtitle {
+  font-size: 28rpx;
+  color: #8080a0;
+}
+
+.rules-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 24rpx;
+  padding: 32rpx 40rpx;
+  width: 100%;
+  max-width: 560rpx;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rules-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #c0c0e0;
+  margin-bottom: 20rpx;
+}
+
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.rule-item {
+  font-size: 26rpx;
+  color: #9090b0;
+  line-height: 1.6;
+}
+
+.rule-item .highlight {
+  color: #c0a0ff;
+  font-weight: 600;
+}
+
+.start-btn {
+  width: 400rpx;
+  height: 96rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 12rpx 40rpx rgba(102, 126, 234, 0.4);
+  transition: transform 0.2s;
+}
+
+.start-btn:active {
+  transform: scale(0.96);
+}
+
+.start-btn-text {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 4rpx;
+}
+
+/* ==================== 答题界面 ==================== */
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+/* 顶部进度 */
+.game-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.progress-text {
+  font-size: 26rpx;
+  color: #8080a0;
+}
+
+.current-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #c0a0ff;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 12rpx;
+}
+
+.dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s;
+}
+
+.dot.current {
+  background: #c0a0ff;
+  box-shadow: 0 0 12rpx rgba(192, 160, 255, 0.6);
+  width: 32rpx;
+}
+
+.dot.done {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dot.dot-correct {
+  background: #4ade80;
+}
+
+.dot.dot-wrong {
+  background: #f87171;
+}
+
+/* 音频区域 */
+.audio-section {
+  padding: 20rpx 0;
+}
+
+/* 题目 */
+.question-text {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #e0e0f0;
+  text-align: center;
+  padding: 16rpx 0;
+}
+
+/* 选项 */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.option-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx 32rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s;
+}
+
+.option-card:active {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(0.98);
+}
+
+.option-letter {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 28rpx;
+  background: rgba(102, 126, 234, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #a0b0ff;
+  flex-shrink: 0;
+}
+
+.option-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #d0d0e0;
+}
+
+.option-icon {
+  width: 48rpx;
+  text-align: center;
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+/* 选项状态 */
+.option-correct {
+  background: rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+.option-correct .option-letter {
+  background: rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+.option-correct .option-icon {
+  color: #4ade80;
+}
+
+.option-wrong {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.4);
+}
+
+.option-wrong .option-letter {
+  background: rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.option-wrong .option-icon {
+  color: #f87171;
+}
+
+.option-dimmed {
+  opacity: 0.4;
+}
+
+/* 反馈横幅 */
+.feedback-banner {
+  text-align: center;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-banner.correct {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+.feedback-banner.wrong {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}
+
+/* ==================== 结果界面 ==================== */
+.result-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32rpx;
+  padding-bottom: 60rpx;
+}
+
+.result-header {
+  text-align: center;
+  padding-top: 40rpx;
+}
+
+.stars-row {
+  display: flex;
+  justify-content: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.star {
+  font-size: 56rpx;
+}
+
+.star-filled {
+  animation: popIn 0.3s ease-out;
+}
+
+.star-empty {
+  opacity: 0.3;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); }
+  80% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.result-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12rpx;
+}
+
+.result-score {
+  font-size: 72rpx;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #f093fb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.result-percentage {
+  font-size: 26rpx;
+  color: #8080a0;
+  margin-top: 8rpx;
+}
+
+.evaluation-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20rpx;
+  padding: 28rpx 36rpx;
+  width: 100%;
+  max-width: 560rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #b0b0d0;
+  line-height: 1.8;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 逐题回顾 */
+.review-section {
+  width: 100%;
+  max-width: 560rpx;
+}
+
+.review-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #c0c0e0;
+  margin-bottom: 16rpx;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.review-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 6rpx solid transparent;
+}
+
+.review-correct {
+  border-left-color: #4ade80;
+}
+
+.review-wrong {
+  border-left-color: #f87171;
+}
+
+.review-number {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #a0a0c0;
+  flex-shrink: 0;
+}
+
+.review-detail {
+  flex: 1;
+}
+
+.review-composer {
+  font-size: 26rpx;
+  color: #d0d0e0;
+}
+
+.review-answer {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+/* 按钮组 */
+.result-actions {
+  display: flex;
+  gap: 24rpx;
+  padding-top: 16rpx;
+}
+
+.restart-btn,
+.share-btn {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.restart-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  box-shadow: 0 8rpx 32rpx rgba(102, 126, 234, 0.4);
+}
+
+.share-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #c0c0e0;
+  border: 2rpx solid rgba(255, 255, 255, 0.15);
+}

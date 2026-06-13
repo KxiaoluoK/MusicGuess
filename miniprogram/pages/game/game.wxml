@@ -1,0 +1,134 @@
+<view class="container">
+  <!-- ==================== 开始界面 ==================== -->
+  <view class="screen start-screen" wx:if="{{gameState === 'start'}}">
+    <view class="logo-area">
+      <view class="logo-icon">🎻</view>
+      <view class="logo-title">古典音乐猜曲</view>
+      <view class="logo-subtitle">听一段旋律，猜作曲家</view>
+    </view>
+
+    <view class="rules-card">
+      <view class="rules-title">📋 游戏规则</view>
+      <view class="rules-list">
+        <view class="rule-item">🎵 每局随机 <text class="highlight">5</text> 道题</view>
+        <view class="rule-item">🎧 每段音乐可重听 <text class="highlight">1</text> 次</view>
+        <view class="rule-item">⏰ 不限答题时间</view>
+        <view class="rule-item">⭐ 答完看评分和评价</view>
+      </view>
+    </view>
+
+    <button class="start-btn" bindtap="startGame">
+      <text class="start-btn-text">开始答题</text>
+    </button>
+  </view>
+
+  <!-- ==================== 答题界面 ==================== -->
+  <view class="screen game-screen" wx:if="{{gameState === 'playing' || gameState === 'feedback'}}">
+    <!-- 顶部进度 -->
+    <view class="game-header">
+      <view class="progress-text">
+        第 <text class="current-num">{{currentIndex + 1}}</text> / {{totalQuestions}} 题
+      </view>
+      <view class="progress-dots">
+        <view
+          wx:for="{{questions}}"
+          wx:key="id"
+          class="dot {{index < currentIndex ? 'done' : ''}} {{index === currentIndex ? 'current' : ''}} {{index < currentIndex && answers[index].isCorrect ? 'dot-correct' : ''}} {{index < currentIndex && !answers[index].isCorrect ? 'dot-wrong' : ''}}"
+        ></view>
+      </view>
+    </view>
+
+    <!-- 音频播放器 -->
+    <view class="audio-section">
+      <audio-player
+        src="{{currentQuestion.clipFile}}"
+        playTrigger="{{playTrigger}}"
+        bind:error="onAudioError"
+        bind:replay="onReplay"
+      />
+    </view>
+
+    <!-- 题目文字 -->
+    <view class="question-text">{{currentQuestion.questionText}}</view>
+
+    <!-- 选项列表 -->
+    <view class="options-list">
+      <view
+        wx:for="{{currentQuestion.options}}"
+        wx:key="*this"
+        wx:for-index="idx"
+        class="option-card
+          {{gameState === 'feedback' && idx === currentQuestion.correctIndex ? 'option-correct' : ''}}
+          {{gameState === 'feedback' && idx === selectedIndex && idx !== currentQuestion.correctIndex ? 'option-wrong' : ''}}
+          {{gameState === 'feedback' && idx !== selectedIndex && idx !== currentQuestion.correctIndex ? 'option-dimmed' : ''}}"
+        data-index="{{idx}}"
+        bindtap="selectOption"
+      >
+        <view class="option-letter">{{['A','B','C','D'][idx]}}</view>
+        <view class="option-text">{{item}}</view>
+        <view class="option-icon">
+          <text wx:if="{{gameState === 'feedback' && idx === currentQuestion.correctIndex}}">✓</text>
+          <text wx:elif="{{gameState === 'feedback' && idx === selectedIndex && idx !== currentQuestion.correctIndex}}">✗</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 反馈提示 -->
+    <view class="feedback-banner {{feedbackClass}}" wx:if="{{gameState === 'feedback'}}">
+      <text wx:if="{{isCorrect}}">🎉 回答正确！</text>
+      <text wx:else>😞 正确答案是：{{currentQuestion.options[currentQuestion.correctIndex]}}</text>
+    </view>
+  </view>
+
+  <!-- ==================== 结果界面 ==================== -->
+  <view class="screen result-screen" wx:if="{{gameState === 'result'}}">
+    <!-- 星级评定 -->
+    <view class="result-header">
+      <view class="stars-row">
+        <text wx:for="{{5}}" wx:key="*this" wx:for-index="i"
+              class="star {{i < score.stars ? 'star-filled' : 'star-empty'}}">
+          {{i < score.stars ? '⭐' : '☆'}}
+        </text>
+      </view>
+      <view class="result-title">{{score.title}}</view>
+      <view class="result-score">{{correctCount}} / {{totalQuestions}}</view>
+      <view class="result-percentage">正确率 {{score.percentage}}%</view>
+    </view>
+
+    <!-- 评语 -->
+    <view class="evaluation-card">
+      <text>{{score.evaluation}}</text>
+    </view>
+
+    <!-- 逐题回顾 -->
+    <view class="review-section">
+      <view class="review-title">📝 答题回顾</view>
+      <view class="review-list">
+        <view
+          wx:for="{{resultAnswers}}"
+          wx:key="questionId"
+          class="review-item {{item.isCorrect ? 'review-correct' : 'review-wrong'}}"
+        >
+          <view class="review-number">第{{item.index}}题</view>
+          <view class="review-detail">
+            <view class="review-composer">{{item.composer}} — {{item.pieceName}}</view>
+            <view class="review-answer">
+              <text wx:if="{{item.isCorrect}}">✅ 回答正确</text>
+              <text wx:else>❌ 你选错了</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="result-actions">
+      <button class="restart-btn" bindtap="restartGame">
+        <text>🔄 再来一局</text>
+      </button>
+      <button class="share-btn" open-type="share">
+        <text>📤 分享成绩</text>
+      </button>
+    </view>
+  </view>
+</view>

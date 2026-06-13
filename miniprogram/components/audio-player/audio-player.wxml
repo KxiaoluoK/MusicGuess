@@ -1,0 +1,25 @@
+<view class="audio-player">
+  <view class="play-button" bindtap="replay">
+    <view class="play-icon {{isPlaying ? 'playing' : ''}}">
+      <text wx:if="{{isPlaying}}">⏸</text>
+      <text wx:else>▶</text>
+    </view>
+    <view class="play-label">
+      <text wx:if="{{!hasPlayed}}">点击播放</text>
+      <text wx:elif="{{isPlaying}}">播放中...</text>
+      <text wx:else>重新播放</text>
+    </view>
+  </view>
+
+  <!-- 进度条 -->
+  <view class="progress-bar" wx:if="{{hasPlayed}}">
+    <view class="progress-fill" style="width: {{progress}}%"></view>
+  </view>
+
+  <!-- 重听次数提示 -->
+  <view class="replay-info" wx:if="{{hasPlayed}}">
+    <text class="replay-count">
+      已播放 {{replayCount + 1}} 次（可重听 {{maxReplay}} 次）
+    </text>
+  </view>
+</view>

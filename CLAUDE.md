@@ -1,0 +1,97 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## 行为规则                                                                                                                                        
+                                                                                                                                                   
+1. **全部用中文回复**
+2. **固定称呼"K4U"开头**
+3. **写代码前先说方案，等批准再动手** 
+4. **需求模糊先提问** 
+5. **写完列出边缘情况** — 提交代码时附带边界条件分析
+6. **超 3 个文件先拆任务** — 涉及 4 个以上文件时，先拆成独立步骤用 TaskCreate 跟踪 
+7. **出 bug 先写复现测试** — 在修复前先写能复现问题的测试
+8. **被纠正后制定不再犯的计划** — 每次被指出错误，主动制定预防方案并记录
+
+## Project Overview
+
+MusicGuess (古典音乐猜曲) is a WeChat Mini Program where users listen to classical music clips and answer multiple-choice questions about the composer. Built with the native WeChat Mini Program framework (WXML/WXSS/JS), using WeChat Cloud Development for backend (starting Round 2).
+
+## Development Iteration Plan
+
+The project follows a strict 6-round iterative approach — each round must be verified before proceeding. See `/home/zachary/.claude/plans/claude-plugin-install-frontend-design-cl-iridescent-toast.md` for the full plan.
+
+| Round | Status | What |
+|-------|--------|------|
+| 0 | 🟡 in progress | Content pipeline: download music → clip with ffmpeg → human screening |
+| 1 | ✅ code done | Single-page hardcoded version: play → choose → score, no backend |
+| 2 | ⏳ planned | WeChat Cloud Development: cloud DB, cloud functions, cloud storage |
+| 3 | ⏳ planned | Login + game history |
+| 4 | ⏳ planned | Leaderboard + daily challenge + difficulty levels |
+| 5 | ⏳ planned | Polish: UI/UX, expand to 50 pieces, submit for review |
+
+**Key decisions**: no time limit, 1 replay allowed, 5 questions per game, "identify composer" question type only (Round 1).
+
+## Architecture (Round 1)
+
+```
+miniprogram/
+├── app.js / app.json / app.wxss    # App entry, single page: pages/game/game
+├── pages/game/game.js              # Core game logic — 4-state machine
+├── components/audio-player/        # Audio component wrapping wx.createInnerAudioContext()
+├── data/questions.js               # Hardcoded question pool (6 entries, 2 composers)
+├── utils/score.js                  # calculateScore(), pickQuestions() (Fisher-Yates shuffle)
+└── utils/constants.js              # QUESTIONS_PER_GAME=5, MAX_REPLAY_COUNT=1, star thresholds
+```
+
+**Game state machine** (`gameState`): `start` → `playing` → `feedback` → `result`
+
+- `startGame()`: shuffles pool, picks QUESTIONS_PER_GAME, triggers audio via `playTrigger` increment
+- `selectOption()`: compares `selectedIndex` vs `correctIndex`, records answer, vibrates, waits FEEDBACK_DURATION ms
+- `nextQuestion()`: advances or calls `showResult()`
+- `showResult()`: calls `calculateScore()` → star rating + evaluation text
+
+**Audio player**: Observes `playTrigger` (number) — each increment triggers `play()`. Tracks `replayCount` capped at `MAX_REPLAY_COUNT`. Uses `wx.createInnerAudioContext()`, reinitializes on `src` change.
+
+**Question data** (`data/questions.js`): each entry has `clipFile` (relative path from `/audio/`), `composer`, `pieceName`, `era`, `instrument`, `options[]`, `correctIndex`. Pool size must be ≥ QUESTIONS_PER_GAME.
+
+## Content Pipeline
+
+Music source: Musopen (musopen.org) — public domain MP3 downloads via browser (this environment cannot reach archive.org/musopen.org directly).
+
+Clip preparation workflow:
+```bash
+# 1. Download full MP3s from Musopen → put in music-source/
+# 2. Generate candidate clips (6 per track, 20s each, skip first 30s)
+./scripts/prepare-clips.sh music-source/ clips/
+# 3. Screen candidates with ffplay, copy best 2 per piece to miniprogram/audio/
+# 4. Update data/questions.js to match actual clip filenames and metadata
+```
+
+The script requires `ffmpeg`. Each clip is ~315KB (20s at 128kbps mono). Clips use libmp3lame re-encoding for consistent format.
+
+## Development Commands
+
+No build step, no package manager. Open the project root in WeChat DevTools (微信开发者工具) to compile and preview. Use a test AppID during development.
+
+```bash
+# Listen to generated clips for screening
+ffplay -nodisp -autoexit clips/<filename>.mp3
+
+# Re-run clip generation after adding more music files
+./scripts/prepare-clips.sh music-source/ clips/
+```
+
+## Open Project Structure
+
+`project.config.json` sets `"miniprogramRoot": "miniprogram/"` — WeChat DevTools reads this. The `projectname` field is `MusicGuess`. AppID should be set to a real one before cloud development (Round 2).
+
+## Adding More Questions
+
+1. Download MP3 from Musopen → `music-source/`
+2. Run `./scripts/prepare-clips.sh music-source/ clips/`
+3. Screen with `ffplay`, copy chosen clips to `miniprogram/audio/`
+4. Add entries to `miniprogram/data/questions.js` matching the clip paths and piece metadata
+5. Reload in WeChat DevTools
+
+Each piece yields 2 clips → can create 2-3 question entries per clip by varying the option order and distractor composers.

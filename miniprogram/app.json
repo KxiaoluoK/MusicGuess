@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/game/game"
+  ],
+  "window": {
+    "navigationBarTitleText": "古典音乐猜曲",
+    "navigationBarBackgroundColor": "#1a1a2e",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0f0f23"
+  },
+  "sitemapLocation": "sitemap.json"
+}
