@@ -36,11 +36,18 @@ Component({
       this.play();
     },
     'src': function(newSrc) {
-      // 音频源变化时重置
+      // 音频源变化时重置一切状态
       this.destroyAudio();
       if (newSrc) {
         this.initAudio();
       }
+      this.setData({
+        hasPlayed: false,
+        replayCount: 0,
+        isPlaying: false,
+        currentTime: 0,
+        progress: 0
+      });
     }
   },
 
