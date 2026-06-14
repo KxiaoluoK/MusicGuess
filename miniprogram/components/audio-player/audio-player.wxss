@@ -1,3 +1,5 @@
+.none { background: transparent !important; }
+
 .audio-player {
   display: flex;
   flex-direction: column;
@@ -24,10 +26,8 @@
   color: #f5e6d3;
   box-shadow: 0 8rpx 32rpx rgba(184, 134, 11, 0.35);
   transition: transform 0.2s;
-}
-
-.play-icon:active {
-  transform: scale(0.95);
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 .play-icon.playing {
