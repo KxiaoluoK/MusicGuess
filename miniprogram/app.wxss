@@ -6,3 +6,16 @@ page {
   color: #f5e6d3;
   min-height: 100vh;
 }
+
+/* 彻底移除微信小程序 button 默认蓝色边框 */
+button::after {
+  border: none;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
