@@ -425,11 +425,11 @@
 .restart-btn,
 .share-btn {
   flex: 1;
-  height: 88rpx;
+  height: 100rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 44rpx;
+  border-radius: 20rpx;
   font-size: 28rpx;
   font-weight: 600;
   border: none;
@@ -439,10 +439,12 @@
   background: linear-gradient(135deg, #b8860b 0%, #8b6914 100%);
   color: #f5e6d3;
   box-shadow: 0 8rpx 32rpx rgba(184, 134, 11, 0.3);
+  padding: 0 48rpx;
 }
 
 .share-btn {
   background: rgba(139, 90, 43, 0.15);
   color: #d4b896;
   border: 2rpx solid rgba(139, 90, 43, 0.3);
+  padding: 0 48rpx;
 }
