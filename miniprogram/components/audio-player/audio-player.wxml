@@ -7,7 +7,8 @@
     <view class="play-label">
       <text wx:if="{{!hasPlayed}}">点击播放</text>
       <text wx:elif="{{isPlaying}}">播放中...</text>
-      <text wx:else>重新播放</text>
+      <text wx:elif="{{hasEnded}}">重新播放</text>
+      <text wx:else>继续播放</text>
     </view>
   </view>
 

@@ -23,9 +23,9 @@ Component({
   data: {
     isPlaying: false,
     hasPlayed: false,        // 是否已经播放过至少一次
+    hasEnded: false,         // 是否已经播放完毕
     replayCount: 0,          // 已重听次数
     maxReplay: MAX_REPLAY_COUNT,
-    canReplay: true,
     duration: 0,
     currentTime: 0,
     progress: 0
@@ -43,6 +43,7 @@ Component({
       }
       this.setData({
         hasPlayed: false,
+        hasEnded: false,
         replayCount: 0,
         isPlaying: false,
         currentTime: 0,
@@ -80,7 +81,7 @@ Component({
       });
 
       audio.onPlay(() => {
-        this.setData({ isPlaying: true });
+        this.setData({ isPlaying: true, hasEnded: false });
       });
 
       audio.onPause(() => {
@@ -88,11 +89,11 @@ Component({
       });
 
       audio.onStop(() => {
-        this.setData({ isPlaying: false });
+        this.setData({ isPlaying: false, hasEnded: true });
       });
 
       audio.onEnded(() => {
-        this.setData({ isPlaying: false });
+        this.setData({ isPlaying: false, hasEnded: true });
       });
 
       audio.onTimeUpdate(() => {
@@ -125,21 +126,11 @@ Component({
     },
 
     play() {
+      // 从头播放（换题自动触发 / 首次手动播放）
       if (!this._audio || !this.properties.src) return;
-
-      // 检查重听次数
-      if (this.data.hasPlayed && this.data.replayCount >= this.data.maxReplay) {
-        wx.showToast({ title: '重听次数已用完', icon: 'none', duration: 1500 });
-        return;
-      }
-
-      if (this.data.hasPlayed) {
-        this.setData({ replayCount: this.data.replayCount + 1 });
-      }
-
       this._audio.seek(0);
       this._audio.play();
-      this.setData({ hasPlayed: true });
+      this.setData({ hasPlayed: true, hasEnded: false });
     },
 
     pause() {
@@ -148,30 +139,36 @@ Component({
       }
     },
 
-    togglePlay() {
-      if (this.data.isPlaying) {
-        this.pause();
-      } else {
-        this.play();
-      }
+    resume() {
+      // 从暂停位置继续播放
+      if (!this._audio || !this.properties.src) return;
+      this._audio.play();
     },
 
     handleMainButton() {
-      // 根据当前状态决定行为：首次播放 / 暂停 / 重播
+      // 智能调度：首次播放 / 暂停 / 继续 / 完整重播
       if (!this.data.hasPlayed) {
+        // 首次 → 从头播放
         this.play();
       } else if (this.data.isPlaying) {
+        // 播放中 → 暂停
         this.pause();
-      } else {
+      } else if (this.data.hasEnded) {
+        // 已播完 → 重新播放（计入重听）
         this.replay();
+      } else {
+        // 暂停中（未播完）→ 继续播放
+        this.resume();
       }
     },
 
     replay() {
+      // 完整重听（播完后再次点击）
       if (this.data.replayCount >= this.data.maxReplay) {
         wx.showToast({ title: '重听次数已用完', icon: 'none', duration: 1500 });
         return;
       }
+      this.setData({ replayCount: this.data.replayCount + 1 });
       this.play();
       this.triggerEvent('replay');
     }
