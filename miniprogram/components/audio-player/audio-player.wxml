@@ -1,5 +1,5 @@
 <view class="audio-player">
-  <view class="play-button" bindtap="replay">
+  <view class="play-button" bindtap="handleMainButton">
     <view class="play-icon {{isPlaying ? 'playing' : ''}}">
       <text wx:if="{{isPlaying}}">⏸</text>
       <text wx:else>▶</text>

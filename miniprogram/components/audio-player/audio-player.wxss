@@ -16,13 +16,13 @@
   width: 120rpx;
   height: 120rpx;
   border-radius: 60rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #b8860b 0%, #8b6914 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 48rpx;
-  color: white;
-  box-shadow: 0 8rpx 32rpx rgba(102, 126, 234, 0.4);
+  color: #f5e6d3;
+  box-shadow: 0 8rpx 32rpx rgba(184, 134, 11, 0.35);
   transition: transform 0.2s;
 }
 
@@ -31,25 +31,25 @@
 }
 
 .play-icon.playing {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  box-shadow: 0 8rpx 32rpx rgba(245, 87, 108, 0.4);
+  background: linear-gradient(135deg, #cd853f 0%, #8b4513 100%);
+  box-shadow: 0 8rpx 32rpx rgba(205, 133, 63, 0.4);
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 8rpx 32rpx rgba(245, 87, 108, 0.4); }
-  50% { box-shadow: 0 8rpx 48rpx rgba(245, 87, 108, 0.7); }
+  0%, 100% { box-shadow: 0 8rpx 32rpx rgba(205, 133, 63, 0.4); }
+  50% { box-shadow: 0 8rpx 48rpx rgba(205, 133, 63, 0.7); }
 }
 
 .play-label {
   font-size: 28rpx;
-  color: #a0a0c0;
+  color: #b8a088;
 }
 
 .progress-bar {
   width: 400rpx;
   height: 6rpx;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(139, 90, 43, 0.2);
   border-radius: 3rpx;
   margin-top: 24rpx;
   overflow: hidden;
@@ -57,7 +57,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #b8860b, #c9a64e);
   border-radius: 3rpx;
   transition: width 0.3s linear;
 }
@@ -65,5 +65,5 @@
 .replay-info {
   margin-top: 12rpx;
   font-size: 22rpx;
-  color: #606080;
+  color: #8b7355;
 }

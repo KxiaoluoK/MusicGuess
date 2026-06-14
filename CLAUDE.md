@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 行为规则                                                                                                                                        
                                                                                                                                                    
 1. **全部用中文回复**
-2. **固定称呼"K4U"开头**
+2. **固定称呼"老大"开头**
 3. **写代码前先说方案，等批准再动手** 
 4. **需求模糊先提问** 
 5. **写完列出边缘情况** — 提交代码时附带边界条件分析

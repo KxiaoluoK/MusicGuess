@@ -156,6 +156,17 @@ Component({
       }
     },
 
+    handleMainButton() {
+      // 根据当前状态决定行为：首次播放 / 暂停 / 重播
+      if (!this.data.hasPlayed) {
+        this.play();
+      } else if (this.data.isPlaying) {
+        this.pause();
+      } else {
+        this.replay();
+      }
+    },
+
     replay() {
       if (this.data.replayCount >= this.data.maxReplay) {
         wx.showToast({ title: '重听次数已用完', icon: 'none', duration: 1500 });
