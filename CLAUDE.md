@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 6. **超 3 个文件先拆任务** — 涉及 4 个以上文件时，先拆成独立步骤用 TaskCreate 跟踪 
 7. **出 bug 先写复现测试** — 在修复前先写能复现问题的测试
 8. **被纠正后制定不再犯的计划** — 每次被指出错误，主动制定预防方案并记录
+9. **修改前先建 Git 分支** — 任何代码修改前，先 `git checkout -b feature/xxx` 创建分支，完成后合并回 main
 
 ## Project Overview
 
