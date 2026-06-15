@@ -2,6 +2,7 @@
   "pages": [
     "pages/game/game"
   ],
+  "cloud": true,
   "window": {
     "navigationBarTitleText": "古典音乐猜曲",
     "navigationBarBackgroundColor": "#1a0f0a",
