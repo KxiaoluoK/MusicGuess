@@ -1,7 +1,7 @@
 <view class="audio-player">
   <view class="play-button" bindtap="handleMainButton" hover-class="none">
     <view class="play-icon {{isPlaying ? 'playing' : ''}}">
-      <text wx:if="{{isPlaying}}">⏸</text>
+      <text wx:if="{{isPlaying}}">❚❚</text>
       <text wx:else>▶</text>
     </view>
     <view class="play-label">
