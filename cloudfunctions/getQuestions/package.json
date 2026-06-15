@@ -1,0 +1,9 @@
+{
+  "name": "getQuestions",
+  "version": "1.0.0",
+  "description": "随机抽取题目并返回云存储临时链接",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

@@ -17,8 +17,8 @@
       </view>
     </view>
 
-    <button class="start-btn" bindtap="startGame">
-      <text class="start-btn-text">开始答题</text>
+    <button class="start-btn" bindtap="startGame" disabled="{{loading}}">
+      <text class="start-btn-text">{{loading ? '加载中...' : '开始答题'}}</text>
     </button>
   </view>
 
@@ -32,7 +32,7 @@
       <view class="progress-dots">
         <view
           wx:for="{{questions}}"
-          wx:key="id"
+          wx:key="_id"
           class="dot {{index < currentIndex ? 'done' : ''}} {{index === currentIndex ? 'current' : ''}} {{index < currentIndex && answers[index].isCorrect ? 'dot-correct' : ''}} {{index < currentIndex && !answers[index].isCorrect ? 'dot-wrong' : ''}}"
         ></view>
       </view>
@@ -41,7 +41,7 @@
     <!-- 音频播放器 -->
     <view class="audio-section">
       <audio-player
-        src="{{currentQuestion.clipFile}}"
+        src="{{currentQuestion.clipUrl}}"
         playTrigger="{{playTrigger}}"
         bind:error="onAudioError"
         bind:replay="onReplay"

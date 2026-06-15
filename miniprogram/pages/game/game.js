@@ -1,6 +1,5 @@
-// 答题页 — 第1轮硬编码单机版
-const allQuestions = require('../../data/questions');
-const { calculateScore, pickQuestions } = require('../../utils/score');
+// 答题页 — 第2轮云开发版
+const { calculateScore } = require('../../utils/score');
 const { QUESTIONS_PER_GAME, FEEDBACK_DURATION } = require('../../utils/constants');
 
 Page({
@@ -30,6 +29,7 @@ Page({
 
     // UI 辅助
     feedbackClass: '',
+    loading: false,
 
     // 结果详情
     resultAnswers: []
@@ -40,20 +40,42 @@ Page({
   },
 
   // ========== 开始游戏 ==========
-  startGame() {
-    const picked = pickQuestions(allQuestions, QUESTIONS_PER_GAME);
-    const firstQuestion = picked[0];
+  async startGame() {
+    if (this.data.loading) return;
 
-    this.setData({
-      gameState: 'playing',
-      questions: picked,
-      currentIndex: 0,
-      currentQuestion: firstQuestion,
-      selectedIndex: -1,
-      answers: [],
-      correctCount: 0,
-      playTrigger: this.data.playTrigger + 1  // 触发自动播放
-    });
+    this.setData({ loading: true });
+
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'getQuestions',
+        data: { count: QUESTIONS_PER_GAME }
+      });
+
+      if (res.result.code !== 0) {
+        wx.showToast({ title: res.result.message || '加载题目失败', icon: 'none' });
+        this.setData({ loading: false });
+        return;
+      }
+
+      const questions = res.result.questions;
+      const firstQuestion = questions[0];
+
+      this.setData({
+        gameState: 'playing',
+        questions,
+        currentIndex: 0,
+        currentQuestion: firstQuestion,
+        selectedIndex: -1,
+        answers: [],
+        correctCount: 0,
+        loading: false,
+        playTrigger: this.data.playTrigger + 1  // 触发自动播放
+      });
+    } catch (err) {
+      console.error('云函数调用失败:', err);
+      wx.showToast({ title: '网络异常，请重试', icon: 'none' });
+      this.setData({ loading: false });
+    }
   },
 
   // ========== 选择答案 ==========
@@ -74,7 +96,7 @@ Page({
 
     // 记录答题
     const answer = {
-      questionId: currentQuestion.id,
+      questionId: currentQuestion._id,
       composer: currentQuestion.composer,
       pieceName: currentQuestion.pieceName,
       selectedIndex,
