@@ -24,25 +24,28 @@ The project follows a strict 6-round iterative approach — each round must be v
 
 | Round | Status | What |
 |-------|--------|------|
-| 0 | 🟡 in progress | Content pipeline: download music → clip with ffmpeg → human screening |
-| 1 | ✅ code done | Single-page hardcoded version: play → choose → score, no backend |
-| 2 | ⏳ planned | WeChat Cloud Development: cloud DB, cloud functions, cloud storage |
+| 0 | ✅ done | Content pipeline: download music → clip with ffmpeg → human screening |
+| 1 | ✅ done | Single-page hardcoded version: play → choose → score, no backend |
+| 2 | 🟡 in progress | Cloud dev: cloud DB + cloud functions + cloud storage + 4 question types + preload |
+| 2.5 | ⏳ planned | Expand to 25+ pieces (100+ questions), auto-download scripts, difficulty system |
 | 3 | ⏳ planned | Login + game history |
 | 4 | ⏳ planned | Leaderboard + daily challenge + difficulty levels |
-| 5 | ⏳ planned | Polish: UI/UX, expand to 50 pieces, submit for review |
+| 5 | ⏳ planned | Polish: UI/UX, expand to 50+ pieces, submit for review |
 
-**Key decisions**: no time limit, 1 replay allowed, 5 questions per game, "identify composer" question type only (Round 1).
+**Key decisions**: no time limit, 1 replay allowed, 5 questions per game. 4 question types: composer / pieceName / era / instrument.
 
-## Architecture (Round 1)
+## Architecture (Round 2)
 
 ```
 miniprogram/
-├── app.js / app.json / app.wxss    # App entry, single page: pages/game/game
-├── pages/game/game.js              # Core game logic — 4-state machine
+├── app.js / app.json / app.wxss    # App entry, cloud init, page: pages/game/game
+├── pages/game/game.js              # Core game logic — async cloud-based, 4-state machine
 ├── components/audio-player/        # Audio component wrapping wx.createInnerAudioContext()
-├── data/questions.js               # Hardcoded question pool (6 entries, 2 composers)
 ├── utils/score.js                  # calculateScore(), pickQuestions() (Fisher-Yates shuffle)
-└── utils/constants.js              # QUESTIONS_PER_GAME=5, MAX_REPLAY_COUNT=1, star thresholds
+└── utils/constants.js              # QUESTIONS_PER_GAME=5, MAX_REPLAY_COUNT=1, QUESTION_TYPES
+
+cloudfunctions/getQuestions/        # Cloud function: type-balanced random question fetch
+scripts/questions-v2.jsonl          # 60-question dataset (4 types × 10 clips)
 ```
 
 **Game state machine** (`gameState`): `start` → `playing` → `feedback` → `result`
@@ -71,15 +74,52 @@ Clip preparation workflow:
 
 The script requires `ffmpeg`. Each clip is ~315KB (20s at 128kbps mono). Clips use libmp3lame re-encoding for consistent format.
 
-## Development Commands
+## Git 双仓库工作流 🚨 必须遵守
 
-No build step, no package manager. Open the project root in WeChat DevTools (微信开发者工具) to compile and preview. Use a test AppID during development.
+环境限制：WSL 无法连接 GitHub。代码编辑在 WSL，推送在 Windows Git Bash。
+
+```
+WSL 端 (/home/zachary/AI/project/MusicGuess)
+  → 编辑代码 + git commit
+  → rsync 同步文件到 Windows 路径
+
+Windows Git Bash (//wsl.localhost/Ubuntu/home/zachary/AI/project/MusicGuess)
+  → git push origin <分支>
+
+Windows DevTools 副本 (D:\4. Project\Music Guess\MusicGuess)
+  → git pull 同步最新代码
+  → 微信开发者工具打开这个路径
+```
+
+**每次提交的标准动作：**
 
 ```bash
-# Listen to generated clips for screening
+# 1. WSL：编辑代码 + 提交
+cd /home/zachary/AI/project/MusicGuess
+git add -A
+git commit -m "描述"
+# 同步到 Windows 路径
+rsync -av /home/zachary/AI/project/MusicGuess/miniprogram/ "/mnt/d/4. Project/Music Guess/MusicGuess/miniprogram/"
+cp /home/zachary/AI/project/MusicGuess/cloudfunctions/getQuestions/index.js "/mnt/d/4. Project/Music Guess/MusicGuess/cloudfunctions/getQuestions/index.js"
+
+# 2. Windows Git Bash：推送
+cd "//wsl.localhost/Ubuntu/home/zachary/AI/project/MusicGuess"
+git push origin <分支>
+
+# 3. Windows Git Bash：更新 DevTools 副本
+cd "D:\4. Project\Music Guess\MusicGuess"
+git fetch origin
+git checkout <分支>
+git pull origin <分支>
+```
+
+## Development Commands
+
+```bash
+# 试听裁剪片段
 ffplay -nodisp -autoexit clips/<filename>.mp3
 
-# Re-run clip generation after adding more music files
+# 重新运行裁剪脚本
 ./scripts/prepare-clips.sh music-source/ clips/
 ```
 
