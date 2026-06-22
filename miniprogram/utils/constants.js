@@ -1,5 +1,23 @@
 // 常量定义
 module.exports = {
+  // 题型枚举
+  QUESTION_TYPES: {
+    COMPOSER: 'composer',
+    PIECE_NAME: 'pieceName',
+    ERA: 'era',
+    INSTRUMENT: 'instrument'
+  },
+
+  // 题型权重（用于难度计算）
+  TYPE_WEIGHTS: {
+    composer: 1,
+    instrument: 1,
+    era: 2,
+    pieceName: 3
+  },
+
+  // 5 题中每种题型最少出现次数
+  MIN_PER_TYPE: 1,
   // 每局题目数量
   QUESTIONS_PER_GAME: 5,
 

@@ -49,7 +49,7 @@
     </view>
 
     <!-- 题目文字 -->
-    <view class="question-text">{{currentQuestion.questionText || '这段音乐的作曲家是谁？'}}</view>
+    <view class="question-text">{{currentQuestion.questionText}}</view>
 
     <!-- 选项列表 -->
     <view class="options-list">
@@ -112,9 +112,10 @@
           <view class="review-number">第{{item.index}}题</view>
           <view class="review-detail">
             <view class="review-composer">{{item.composer}} — {{item.pieceName}}</view>
+            <view class="review-composer">🎯 {{item.questionText}}</view>
             <view class="review-answer">
               <text wx:if="{{item.isCorrect}}">✅ 回答正确</text>
-              <text wx:else>❌ 你选错了</text>
+              <text wx:else>❌ 你选了「{{item.options[item.selectedIndex]}}」，答案是「{{item.options[item.correctIndex]}}」</text>
             </view>
           </view>
         </view>

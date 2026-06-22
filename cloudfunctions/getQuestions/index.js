@@ -1,35 +1,75 @@
-// 云函数：随机抽题
-// 从 questions 集合中随机抽取 N 道题，为每道题生成云存储临时播放链接
+// 云函数：随机抽题（多题型均匀分配）
+// 从 questions 集合中按题型比例抽取 N 道题，每种题型至少 1 题
+// 为每道题生成云存储临时播放链接
 const cloud = require('wx-server-sdk');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
+// Fisher-Yates 洗牌
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 exports.main = async (event) => {
   const count = event.count || 5;
+  const minPerType = event.minPerType || 1; // 每种题型最少出现次数
 
   try {
-    // 1. 查询所有题目
     const { data: questions } = await db.collection('questions').get();
 
     if (!questions || questions.length === 0) {
       return { code: -1, message: '题库为空' };
     }
 
-    // 2. Fisher-Yates 洗牌，取前 count 题
-    const shuffled = [...questions];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+    // 1. 按题型分组
+    const groups = {};
+    questions.forEach(q => {
+      const type = q.type || 'composer';
+      if (!groups[type]) groups[type] = [];
+      groups[type].push(q);
+    });
 
-    // 3. 为每个 clipFileId 获取临时下载链接
-    const fileIds = selected.map(q => q.clipFileId);
+    const types = Object.keys(groups);
+    const selected = [];
+    const usedIds = new Set();
+
+    // 2. 每种题型至少选 minPerType 题
+    for (const type of types) {
+      const pool = groups[type].filter(q => !usedIds.has(q._id));
+      const needed = Math.min(minPerType, pool.length);
+      const picked = shuffle(pool).slice(0, needed);
+      picked.forEach(q => {
+        selected.push(q);
+        usedIds.add(q._id);
+      });
+    }
+
+    // 3. 剩余名额随机补全
+    const remaining = count - selected.length;
+    if (remaining > 0) {
+      const restPool = questions.filter(q => !usedIds.has(q._id));
+      const extra = shuffle(restPool).slice(0, remaining);
+      extra.forEach(q => {
+        selected.push(q);
+        usedIds.add(q._id);
+      });
+    }
+
+    // 4. 最终洗牌（避免题型顺序固定）
+    const finalSelection = shuffle(selected);
+
+    // 5. 为每个 clipFileId 获取临时下载链接
+    const fileIds = finalSelection.map(q => q.clipFileId);
     const tempResult = await cloud.getTempFileURL({ fileList: fileIds });
 
-    // 4. 合并结果
-    const result = selected.map((q, idx) => ({
+    // 6. 合并结果
+    const result = finalSelection.map((q, idx) => ({
       ...q,
       clipUrl: tempResult.fileList[idx].tempFileURL
     }));

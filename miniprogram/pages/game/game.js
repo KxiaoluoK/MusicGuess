@@ -1,4 +1,4 @@
-// 答题页 — 第2轮云开发版
+// 答题页 — 第2轮云开发版（多题型 + 预加载）
 const { calculateScore } = require('../../utils/score');
 const { QUESTIONS_PER_GAME, FEEDBACK_DURATION } = require('../../utils/constants');
 
@@ -94,11 +94,16 @@ Page({
       feedbackClass: isCorrect ? 'correct' : 'wrong'
     });
 
-    // 记录答题
+    // 记录答题（含题型信息）
     const answer = {
       questionId: currentQuestion._id,
+      type: currentQuestion.type,
       composer: currentQuestion.composer,
       pieceName: currentQuestion.pieceName,
+      era: currentQuestion.era,
+      instrument: currentQuestion.instrument,
+      questionText: currentQuestion.questionText,
+      options: currentQuestion.options,
       selectedIndex,
       correctIndex: currentQuestion.correctIndex,
       isCorrect
@@ -140,7 +145,39 @@ Page({
         feedbackClass: '',
         playTrigger: this.data.playTrigger + 1  // 触发自动播放
       });
+
+      // 静默预加载下一题的音频
+      this._preloadNextAudio(nextIndex);
     }
+  },
+
+  // ========== 音频预加载 ==========
+  _preloadNextAudio(currentIdx) {
+    const nextIdx = currentIdx + 1;
+    if (nextIdx >= this.data.questions.length) return;
+
+    const nextQ = this.data.questions[nextIdx];
+    const url = nextQ.clipUrl;
+    if (!url) return;
+
+    // 已经是本地路径则跳过
+    if (url.startsWith('wxfile://') || url.startsWith('http://tmp/')) return;
+
+    wx.downloadFile({
+      url: url,
+      success: (res) => {
+        if (res.statusCode === 200 && res.tempFilePath) {
+          // 用本地路径替换云存储 URL，下次播放直接走本地
+          const questions = this.data.questions;
+          questions[nextIdx].clipUrl = res.tempFilePath;
+          // 静默更新 data，不影响当前播放
+          this.setData({ questions });
+        }
+      },
+      fail: () => {
+        // 预加载失败不影响游戏，继续用云存储 URL
+      }
+    });
   },
 
   // ========== 显示结果 ==========
