@@ -21,7 +21,7 @@ exports.main = async (event) => {
   const minPerType = event.minPerType || 1; // 每种题型最少出现次数
 
   try {
-    const { data: questions } = await db.collection('questions').get();
+    const { data: questions } = await db.collection('questions').limit(500).get();
 
     if (!questions || questions.length === 0) {
       return { code: -1, message: '题库为空' };
@@ -68,11 +68,21 @@ exports.main = async (event) => {
     const fileIds = finalSelection.map(q => q.clipFileId);
     const tempResult = await cloud.getTempFileURL({ fileList: fileIds });
 
-    // 6. 合并结果
-    const result = finalSelection.map((q, idx) => ({
-      ...q,
-      clipUrl: tempResult.fileList[idx].tempFileURL
-    }));
+    // 6. 合并结果，过滤获取链接失败的题目
+    const result = finalSelection
+      .map((q, idx) => {
+        const tempUrl = tempResult.fileList[idx].tempFileURL;
+        if (!tempUrl) {
+          console.warn('getTempFileURL 失败:', q.clipFileId, tempResult.fileList[idx].errMsg);
+          return null;
+        }
+        return { ...q, clipUrl: tempUrl };
+      })
+      .filter(Boolean);
+
+    if (result.length === 0) {
+      return { code: -1, message: '音频链接获取失败' };
+    }
 
     return { code: 0, questions: result };
   } catch (err) {
