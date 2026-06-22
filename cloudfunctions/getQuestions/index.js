@@ -1,12 +1,10 @@
-// 云函数：随机抽题（多题型均匀分配 + 音频不重复）
-// 从 questions 集合中按题型比例抽取 N 道题，每种题型至少 1 题
-// 确保同一音频片段不会出现两次
+// 云函数：随机抽题（多题型均匀分配 + 音频尽量不重复）
+// 预选多题备用，确保过滤无效链接后仍够 5 题
 const cloud = require('wx-server-sdk');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
-// Fisher-Yates 洗牌
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -18,7 +16,6 @@ function shuffle(arr) {
 
 exports.main = async (event) => {
   const count = event.count || 5;
-  const minPerType = event.minPerType || 1;
 
   try {
     const { data: questions } = await db.collection('questions').limit(500).get();
@@ -40,11 +37,10 @@ exports.main = async (event) => {
     const usedIds = new Set();
     const usedClipIds = new Set();
 
-    // 2. 每种题型至少选 minPerType 题
+    // 2. 每种题型至少选 1 题
     for (const type of types) {
       const pool = groups[type].filter(q => !usedIds.has(q._id));
-      const needed = Math.min(minPerType, pool.length);
-      const picked = shuffle(pool).slice(0, needed);
+      const picked = shuffle(pool).slice(0, 1);
       picked.forEach(q => {
         selected.push(q);
         usedIds.add(q._id);
@@ -52,21 +48,18 @@ exports.main = async (event) => {
       });
     }
 
-    // 3. 剩余名额补全，优先选择不同音频片段
-    const remaining = count - selected.length;
+    // 3. 补充备选题（选 count×2 题缓冲过滤损耗）
+    const bufferSize = count * 2;
+    const remaining = bufferSize - selected.length;
     if (remaining > 0) {
       const restPool = questions.filter(q => !usedIds.has(q._id));
-      // 优先选不同 clip 的题
-      const freshClip = restPool.filter(q => !usedClipIds.has(q.clipFileId));
-      const reuseClip = restPool.filter(q => usedClipIds.has(q.clipFileId));
-
-      const extra = shuffle(freshClip).slice(0, remaining);
-      // 如果不同 clip 不够，才用重复 clip 的
-      if (extra.length < remaining) {
-        const moreNeeded = remaining - extra.length;
-        extra.push(...shuffle(reuseClip).slice(0, moreNeeded));
-      }
-
+      // 优先不同 clip
+      const fresh = restPool.filter(q => !usedClipIds.has(q.clipFileId));
+      const reuse = restPool.filter(q => usedClipIds.has(q.clipFileId));
+      const extra = [
+        ...shuffle(fresh).slice(0, remaining),
+        ...shuffle(reuse).slice(0, Math.max(0, remaining - fresh.length))
+      ];
       extra.forEach(q => {
         selected.push(q);
         usedIds.add(q._id);
@@ -74,24 +67,23 @@ exports.main = async (event) => {
       });
     }
 
-    // 4. 最终洗牌
-    const finalSelection = shuffle(selected);
+    const candidates = shuffle(selected);
 
-    // 5. 获取临时下载链接
-    const fileIds = finalSelection.map(q => q.clipFileId);
+    // 4. 获取临时下载链接
+    const fileIds = candidates.map(q => q.clipFileId);
     const tempResult = await cloud.getTempFileURL({ fileList: fileIds });
 
-    // 6. 合并结果，过滤获取链接失败的题目
-    const result = finalSelection
-      .map((q, idx) => {
-        const tempUrl = tempResult.fileList[idx].tempFileURL;
-        if (!tempUrl) {
-          console.warn('getTempFileURL 失败:', q.clipFileId, tempResult.fileList[idx].errMsg);
-          return null;
-        }
-        return { ...q, clipUrl: tempUrl };
-      })
-      .filter(Boolean);
+    // 5. 取前 count 个有效的
+    const result = [];
+    for (let i = 0; i < candidates.length; i++) {
+      const tempUrl = tempResult.fileList[i].tempFileURL;
+      if (tempUrl) {
+        result.push({ ...candidates[i], clipUrl: tempUrl });
+      } else {
+        console.warn('getTempFileURL 失败:', candidates[i].clipFileId);
+      }
+      if (result.length >= count) break;
+    }
 
     if (result.length === 0) {
       return { code: -1, message: '音频链接获取失败' };
