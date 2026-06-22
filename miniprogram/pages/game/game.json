@@ -2,6 +2,5 @@
   "usingComponents": {
     "audio-player": "/components/audio-player/audio-player"
   },
-  "navigationBarTitleText": "古典音乐猜曲",
-  "disableScroll": true
+  "navigationBarTitleText": "古典音乐猜曲"
 }
