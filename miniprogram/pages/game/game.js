@@ -63,13 +63,14 @@ Page({
       this.setData({
         gameState: 'playing',
         questions,
+        totalQuestions: questions.length,
         currentIndex: 0,
         currentQuestion: firstQuestion,
         selectedIndex: -1,
         answers: [],
         correctCount: 0,
         loading: false,
-        playTrigger: this.data.playTrigger + 1  // 触发自动播放
+        playTrigger: this.data.playTrigger + 1
       });
     } catch (err) {
       console.error('云函数调用失败:', err);

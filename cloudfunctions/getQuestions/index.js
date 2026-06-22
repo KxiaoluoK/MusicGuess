@@ -1,6 +1,6 @@
-// 云函数：随机抽题（多题型均匀分配）
+// 云函数：随机抽题（多题型均匀分配 + 音频不重复）
 // 从 questions 集合中按题型比例抽取 N 道题，每种题型至少 1 题
-// 为每道题生成云存储临时播放链接
+// 确保同一音频片段不会出现两次
 const cloud = require('wx-server-sdk');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -18,7 +18,7 @@ function shuffle(arr) {
 
 exports.main = async (event) => {
   const count = event.count || 5;
-  const minPerType = event.minPerType || 1; // 每种题型最少出现次数
+  const minPerType = event.minPerType || 1;
 
   try {
     const { data: questions } = await db.collection('questions').limit(500).get();
@@ -38,6 +38,7 @@ exports.main = async (event) => {
     const types = Object.keys(groups);
     const selected = [];
     const usedIds = new Set();
+    const usedClipIds = new Set();
 
     // 2. 每种题型至少选 minPerType 题
     for (const type of types) {
@@ -47,24 +48,36 @@ exports.main = async (event) => {
       picked.forEach(q => {
         selected.push(q);
         usedIds.add(q._id);
+        usedClipIds.add(q.clipFileId);
       });
     }
 
-    // 3. 剩余名额随机补全
+    // 3. 剩余名额补全，优先选择不同音频片段
     const remaining = count - selected.length;
     if (remaining > 0) {
       const restPool = questions.filter(q => !usedIds.has(q._id));
-      const extra = shuffle(restPool).slice(0, remaining);
+      // 优先选不同 clip 的题
+      const freshClip = restPool.filter(q => !usedClipIds.has(q.clipFileId));
+      const reuseClip = restPool.filter(q => usedClipIds.has(q.clipFileId));
+
+      const extra = shuffle(freshClip).slice(0, remaining);
+      // 如果不同 clip 不够，才用重复 clip 的
+      if (extra.length < remaining) {
+        const moreNeeded = remaining - extra.length;
+        extra.push(...shuffle(reuseClip).slice(0, moreNeeded));
+      }
+
       extra.forEach(q => {
         selected.push(q);
         usedIds.add(q._id);
+        usedClipIds.add(q.clipFileId);
       });
     }
 
-    // 4. 最终洗牌（避免题型顺序固定）
+    // 4. 最终洗牌
     const finalSelection = shuffle(selected);
 
-    // 5. 为每个 clipFileId 获取临时下载链接
+    // 5. 获取临时下载链接
     const fileIds = finalSelection.map(q => q.clipFileId);
     const tempResult = await cloud.getTempFileURL({ fileList: fileIds });
 
