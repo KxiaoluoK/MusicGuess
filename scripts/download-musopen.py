@@ -151,10 +151,13 @@ def cmd_get(session, identifier, name_filter, out_dir):
 
 def main():
     parser = argparse.ArgumentParser(description="从 Internet Archive 下载公共领域古典音乐")
+    parser.add_argument("--proxy", default=None, help="代理地址，如 http://127.0.0.1:52506")
 
-    # 公共参数：--proxy 放在子命令后面（search/files/get 之后）
+    # 子命令也接受 --proxy（用 SUPPRESS 避免覆盖主命令捕获的值），
+    # 这样 --proxy 放在子命令前面或后面都能识别
     common = argparse.ArgumentParser(add_help=False)
-    common.add_argument("--proxy", help="代理地址，如 http://127.0.0.1:8787")
+    common.add_argument("--proxy", default=argparse.SUPPRESS,
+                        help="代理地址，如 http://127.0.0.1:52506")
 
     sub = parser.add_subparsers(dest="command", required=True)
 
