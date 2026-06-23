@@ -151,17 +151,21 @@ def cmd_get(session, identifier, name_filter, out_dir):
 
 def main():
     parser = argparse.ArgumentParser(description="从 Internet Archive 下载公共领域古典音乐")
-    parser.add_argument("--proxy", help="代理地址，如 http://127.0.0.1:7890")
+
+    # 公共参数：--proxy 放在子命令后面（search/files/get 之后）
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--proxy", help="代理地址，如 http://127.0.0.1:8787")
+
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_search = sub.add_parser("search", help="搜索曲目")
+    p_search = sub.add_parser("search", parents=[common], help="搜索曲目")
     p_search.add_argument("query", help="搜索关键词，如 'Vivaldi Spring'")
     p_search.add_argument("--rows", type=int, default=15, help="返回结果数（默认15）")
 
-    p_files = sub.add_parser("files", help="列出条目内的音频文件")
+    p_files = sub.add_parser("files", parents=[common], help="列出条目内的音频文件")
     p_files.add_argument("identifier", help="archive.org 条目 identifier")
 
-    p_get = sub.add_parser("get", help="下载条目内的音频")
+    p_get = sub.add_parser("get", parents=[common], help="下载条目内的音频")
     p_get.add_argument("identifier", help="archive.org 条目 identifier")
     p_get.add_argument("--filter", dest="name_filter", default="", help="只下文件名含此关键词的")
     p_get.add_argument("--out", default="music-source", help="输出目录（默认 music-source）")
