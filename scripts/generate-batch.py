@@ -8,7 +8,7 @@ pieces = [
     {"composer":"亨德尔","pieceName":"水上音乐 Alla Hornpipe","era":"巴洛克","instrument":"管弦乐"},
     {"composer":"阿尔比诺尼","pieceName":"g小调柔板","era":"巴洛克","instrument":"弦乐与管风琴"},
     {"composer":"巴赫","pieceName":"G弦上的咏叹调","era":"巴洛克","instrument":"弦乐"},
-    {"composer":"莫扎特","pieceName":"土耳其进行曲","era":"古典","instrument":"钢琴独奏"},
+    {"composer":"莫扎特","pieceName":"土耳其进行曲","era":"古典","instrument":"管弦乐"},
     {"composer":"莫扎特","pieceName":"弦乐小夜曲 K.525 第一乐章","era":"古典","instrument":"弦乐"},
     {"composer":"海顿","pieceName":"惊愕交响曲 第二乐章","era":"古典","instrument":"管弦乐"},
     {"composer":"贝多芬","pieceName":"致爱丽丝","era":"古典","instrument":"钢琴独奏"},
