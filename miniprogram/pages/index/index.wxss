@@ -75,9 +75,9 @@
 }
 
 .diff-btn.hard {
-  background: rgba(139, 90, 43, 0.1);
-  border: 2rpx solid rgba(139, 90, 43, 0.2);
-  opacity: 0.6;
+  background: rgba(139, 90, 43, 0.15);
+  border: 2rpx solid rgba(139, 90, 43, 0.35);
+  opacity: 0.75;
 }
 
 .diff-icon {
@@ -92,7 +92,7 @@
 
 .diff-hint {
   font-size: 18rpx;
-  color: #8b7355;
+  color: #a89880;
 }
 
 .menu-area {
