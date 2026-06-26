@@ -2,17 +2,19 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
-exports.main = async () => {
+exports.main = async (event) => {
+  const difficulty = event.difficulty || 0;
+
   try {
-    // 聚合查询：按 _openid 分组，统计总分和总局数
     const { data: records } = await db.collection('gameRecords')
       .orderBy('createdAt', 'desc')
       .limit(200)
       .get();
 
-    // 内存聚合（云数据库聚合管道限制较多，这里数据量小时直接用 JS 聚合）
+    // 内存聚合 + 按难度筛选
     const userMap = {};
     records.forEach(r => {
+      if (difficulty > 0 && r.difficulty !== difficulty) return;
       const oid = r._openid;
       if (!userMap[oid]) {
         userMap[oid] = {
@@ -29,7 +31,6 @@ exports.main = async () => {
       }
     });
 
-    // 按总分排序
     const board = Object.values(userMap)
       .map(u => ({
         _openid: u._openid,

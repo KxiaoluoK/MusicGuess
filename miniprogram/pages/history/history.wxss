@@ -60,6 +60,15 @@
   font-size: 28rpx;
 }
 
+.record-diff {
+  flex: 1;
+  font-size: 22rpx;
+  color: #c9a64e;
+  padding: 2rpx 16rpx;
+  background: rgba(201,166,78,0.1);
+  border-radius: 10rpx;
+}
+
 .record-date {
   font-size: 24rpx;
   color: #8b7355;

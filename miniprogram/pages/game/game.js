@@ -29,6 +29,7 @@ Page({
 
     // 难度
     difficulty: 0,
+    difficultyLabel: '',
 
     // UI 辅助
     feedbackClass: '',
@@ -41,7 +42,8 @@ Page({
   onLoad(options) {
     // 读取难度参数
     const difficulty = parseInt(options.difficulty) || 0;
-    this.setData({ difficulty });
+    const diffLabels = { 0: '不限难度', 1: '🌱 简单', 2: '🎵 中等', 3: '🔒 困难' };
+    this.setData({ difficulty, difficultyLabel: diffLabels[difficulty] || '' });
   },
 
   // ========== 开始游戏 ==========
@@ -209,7 +211,7 @@ Page({
     // 提交成绩到云端（静默，不阻塞）
     wx.cloud.callFunction({
       name: 'submitScore',
-      data: { score, answers: resultAnswers }
+      data: { score, answers: resultAnswers, difficulty: this.data.difficulty }
     }).catch(() => {});
 
     // 结果页震动

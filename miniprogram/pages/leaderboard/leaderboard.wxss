@@ -5,6 +5,33 @@
   box-sizing: border-box;
 }
 
+.diff-tabs {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 28rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 26rpx;
+  color: #8b7355;
+  background: rgba(139,90,43,0.08);
+  border-radius: 16rpx;
+  border: 1px solid rgba(139,90,43,0.15);
+}
+
+.tab.active {
+  color: #f5e6d3;
+  background: rgba(201,166,78,0.2);
+  border-color: rgba(201,166,78,0.4);
+}
+
+.tab.disabled {
+  opacity: 0.4;
+}
+
 .empty-state {
   display: flex;
   flex-direction: column;

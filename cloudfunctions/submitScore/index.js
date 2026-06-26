@@ -3,7 +3,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
 exports.main = async (event) => {
-  const { score, answers } = event;
+  const { score, answers, difficulty } = event;
   const { OPENID } = cloud.getWXContext();
 
   try {
@@ -12,6 +12,7 @@ exports.main = async (event) => {
         _openid: OPENID,
         score,
         answers,
+        difficulty: difficulty || 0,
         createdAt: db.serverDate()
       }
     });

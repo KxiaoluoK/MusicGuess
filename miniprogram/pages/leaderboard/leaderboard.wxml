@@ -1,11 +1,13 @@
 <view class="container">
-  <view class="empty-state" wx:if="{{!loading && board.length === 0}}">
-    <view class="empty-icon">🏆</view>
-    <view class="empty-text">还没有玩家上榜</view>
-    <view class="empty-hint">去答一局题，成为第一名！</view>
+  <!-- 难度切换 -->
+  <view class="diff-tabs">
+    <view class="tab {{difficulty === 0 ? 'active' : ''}}" bindtap="switchDiff" data-d="0">全部</view>
+    <view class="tab easy {{difficulty === 1 ? 'active' : ''}}" bindtap="switchDiff" data-d="1">🌱 简单</view>
+    <view class="tab medium {{difficulty === 2 ? 'active' : ''}}" bindtap="switchDiff" data-d="2">🎵 中等</view>
+    <view class="tab hard disabled">🔒 困难</view>
   </view>
 
-  <view class="board-list" wx:if="{{board.length > 0}}">
+  <view class="board-list" wx:if="{{!loading && board.length > 0}}">
     <view class="board-header">
       <text class="rank-col">排名</text>
       <text class="score-col">均分</text>
@@ -30,6 +32,12 @@
         <text>{{item.totalGames}} 局</text>
       </view>
     </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{!loading && board.length === 0}}">
+    <view class="empty-icon">🏆</view>
+    <view class="empty-text">暂无数据</view>
+    <view class="empty-hint">去答一局题，成为第一名！</view>
   </view>
 
   <view class="loading" wx:if="{{loading}}">

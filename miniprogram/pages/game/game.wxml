@@ -5,6 +5,7 @@
       <view class="logo-icon">🎻</view>
       <view class="logo-title">古典音乐猜曲</view>
       <view class="logo-subtitle">听一段旋律，猜作曲家</view>
+      <view class="difficulty-tag" wx:if="{{difficultyLabel}}">{{difficultyLabel}}</view>
     </view>
 
     <view class="rules-card">
