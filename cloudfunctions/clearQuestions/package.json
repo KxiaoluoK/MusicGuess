@@ -1,0 +1,9 @@
+{
+  "name": "clearQuestions",
+  "version": "1.0.0",
+  "description": "临时云函数：清空题库",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

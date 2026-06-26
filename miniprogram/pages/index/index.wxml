@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="logo-area">
+    <view class="logo-icon">🎻</view>
+    <view class="logo-title">古典音乐猜曲</view>
+    <view class="logo-subtitle">听一段旋律，猜出答案</view>
+  </view>
+
+  <view class="menu-area">
+    <button class="menu-btn primary" bindtap="goGame">
+      <text class="menu-icon">🎵</text>
+      <text class="menu-text">开始答题</text>
+    </button>
+    <button class="menu-btn secondary" bindtap="goHistory">
+      <text class="menu-icon">📋</text>
+      <text class="menu-text">历史记录</text>
+    </button>
+  </view>
+</view>

@@ -197,6 +197,12 @@ Page({
       resultAnswers
     });
 
+    // 提交成绩到云端（静默，不阻塞）
+    wx.cloud.callFunction({
+      name: 'submitScore',
+      data: { score, answers: resultAnswers }
+    }).catch(() => {});
+
     // 结果页震动
     wx.vibrateLong();
   },
@@ -204,6 +210,11 @@ Page({
   // ========== 再来一局 ==========
   restartGame() {
     this.startGame();
+  },
+
+  // ========== 返回首页 ==========
+  goHome() {
+    wx.navigateBack();
   },
 
   // ========== 分享 ==========

@@ -1,6 +1,8 @@
 {
   "pages": [
-    "pages/game/game"
+    "pages/index/index",
+    "pages/game/game",
+    "pages/history/history"
   ],
   "cloud": true,
   "window": {

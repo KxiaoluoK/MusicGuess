@@ -1,0 +1,9 @@
+{
+  "name": "submitScore",
+  "version": "1.0.0",
+  "description": "提交一局成绩到 gameRecords",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "getUserHistory",
+  "version": "1.0.0",
+  "description": "拉取用户历史记录",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

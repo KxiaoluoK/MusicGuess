@@ -131,5 +131,10 @@
         <text>📤 分享成绩</text>
       </button>
     </view>
+    <view class="result-actions">
+      <button class="home-btn" bindtap="goHome">
+        <text>🏠 返回首页</text>
+      </button>
+    </view>
   </view>
 </view>
