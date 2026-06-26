@@ -13,7 +13,7 @@
         </view>
         <view class="record-diff" wx:if="{{item.difficulty > 0}}">
           <text wx:if="{{item.difficulty === 1}}">🌱 简单</text>
-          <text wx:elif="{{item.difficulty === 2}}">🎵 中等</text>
+          <text wx:elif="{{item.difficulty === 2}}">🔥 中等</text>
           <text wx:else>🔒 困难</text>
         </view>
         <view class="record-date">{{item.createdAt}}</view>

@@ -3,7 +3,7 @@
   <view class="diff-tabs">
     <view class="tab {{difficulty === 0 ? 'active' : ''}}" bindtap="switchDiff" data-d="0">全部</view>
     <view class="tab easy {{difficulty === 1 ? 'active' : ''}}" bindtap="switchDiff" data-d="1">🌱 简单</view>
-    <view class="tab medium {{difficulty === 2 ? 'active' : ''}}" bindtap="switchDiff" data-d="2">🎵 中等</view>
+    <view class="tab medium {{difficulty === 2 ? 'active' : ''}}" bindtap="switchDiff" data-d="2">🔥 中等</view>
     <view class="tab hard disabled">🔒 困难</view>
   </view>
 

@@ -42,7 +42,7 @@ Page({
   onLoad(options) {
     // 读取难度参数
     const difficulty = parseInt(options.difficulty) || 0;
-    const diffLabels = { 0: '不限难度', 1: '🌱 简单', 2: '🎵 中等', 3: '🔒 困难' };
+    const diffLabels = { 0: '不限难度', 1: '🌱 简单', 2: '🔥 中等', 3: '🔒 困难' };
     this.setData({ difficulty, difficultyLabel: diffLabels[difficulty] || '' });
   },
 

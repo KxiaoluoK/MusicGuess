@@ -13,7 +13,7 @@
       <text class="diff-label">简单</text>
     </button>
     <button class="diff-btn medium" bindtap="goGame" data-difficulty="2">
-      <text class="diff-icon">🎵</text>
+      <text class="diff-icon">🔥</text>
       <text class="diff-label">中等</text>
     </button>
     <button class="diff-btn hard" disabled>
