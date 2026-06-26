@@ -77,8 +77,10 @@
 .diff-btn.hard {
   background: rgba(180, 140, 100, 0.2);
   border: 2rpx solid rgba(180, 140, 100, 0.4);
-  height: 160rpx;
-  gap: 4rpx;
+  height: 180rpx;
+  gap: 2rpx;
+  justify-content: flex-start;
+  padding-top: 20rpx;
 }
 
 .diff-icon {
