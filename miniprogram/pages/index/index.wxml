@@ -18,8 +18,7 @@
     </button>
     <button class="diff-btn hard" disabled>
       <text class="diff-icon">🔒</text>
-      <text class="diff-label">困难</text>
-      <text class="diff-hint">敬请期待</text>
+      <text class="diff-label">困难<text class="diff-hint"> · 敬请期待</text></text>
     </button>
   </view>
 
