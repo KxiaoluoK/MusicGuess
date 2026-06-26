@@ -1,0 +1,38 @@
+<view class="container">
+  <view class="empty-state" wx:if="{{!loading && board.length === 0}}">
+    <view class="empty-icon">🏆</view>
+    <view class="empty-text">还没有玩家上榜</view>
+    <view class="empty-hint">去答一局题，成为第一名！</view>
+  </view>
+
+  <view class="board-list" wx:if="{{board.length > 0}}">
+    <view class="board-header">
+      <text class="rank-col">排名</text>
+      <text class="score-col">均分</text>
+      <text class="games-col">场次</text>
+    </view>
+    <view
+      class="board-item {{item._openid === myOpenid ? 'is-me' : ''}}"
+      wx:for="{{board}}"
+      wx:key="_openid"
+    >
+      <view class="rank-col">
+        <text class="rank-num" wx:if="{{index > 2}}">{{index + 1}}</text>
+        <text class="rank-medal" wx:if="{{index === 0}}">🥇</text>
+        <text class="rank-medal" wx:elif="{{index === 1}}">🥈</text>
+        <text class="rank-medal" wx:elif="{{index === 2}}">🥉</text>
+      </view>
+      <view class="score-col">
+        <text class="avg-score">{{item.avgScore}}%</text>
+        <text class="best-score">最佳 {{item.bestScore}}%</text>
+      </view>
+      <view class="games-col">
+        <text>{{item.totalGames}} 局</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

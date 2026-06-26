@@ -18,10 +18,15 @@ exports.main = async (event) => {
   const count = event.count || 5;
 
   try {
-    const { data: questions } = await db.collection('questions').limit(500).get();
+    let { data: questions } = await db.collection('questions').limit(500).get();
+
+    // 难度筛选
+    if (event.difficulty) {
+      questions = questions.filter(q => q.difficulty === event.difficulty);
+    }
 
     if (!questions || questions.length === 0) {
-      return { code: -1, message: '题库为空' };
+      return { code: -1, message: event.difficulty ? '该难度题库为空' : '题库为空' };
     }
 
     // 1. 按题型分组

@@ -27,6 +27,9 @@ Page({
     score: { stars: 1, title: '', evaluation: '', percentage: 0 },
     correctCount: 0,
 
+    // 难度
+    difficulty: 0,
+
     // UI 辅助
     feedbackClass: '',
     loading: false,
@@ -35,8 +38,10 @@ Page({
     resultAnswers: []
   },
 
-  onLoad() {
-    // 页面加载，显示开始界面
+  onLoad(options) {
+    // 读取难度参数
+    const difficulty = parseInt(options.difficulty) || 0;
+    this.setData({ difficulty });
   },
 
   // ========== 开始游戏 ==========
@@ -46,9 +51,13 @@ Page({
     this.setData({ loading: true });
 
     try {
+      const callData = { count: QUESTIONS_PER_GAME };
+      if (this.data.difficulty > 0) {
+        callData.difficulty = this.data.difficulty;
+      }
       const res = await wx.cloud.callFunction({
         name: 'getQuestions',
-        data: { count: QUESTIONS_PER_GAME }
+        data: callData
       });
 
       if (res.result.code !== 0) {

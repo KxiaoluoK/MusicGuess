@@ -5,14 +5,37 @@
     <view class="logo-subtitle">听一段旋律，猜出答案</view>
   </view>
 
-  <view class="menu-area">
-    <button class="menu-btn primary" bindtap="goGame">
-      <text class="menu-icon">🎵</text>
-      <text class="menu-text">开始答题</text>
+  <!-- 难度选择 -->
+  <view class="section-title">选择难度</view>
+  <view class="difficulty-area">
+    <button class="diff-btn easy" bindtap="goGame" data-difficulty="1">
+      <text class="diff-icon">🌱</text>
+      <text class="diff-label">简单</text>
     </button>
-    <button class="menu-btn secondary" bindtap="goHistory">
+    <button class="diff-btn medium" bindtap="goGame" data-difficulty="2">
+      <text class="diff-icon">🎵</text>
+      <text class="diff-label">中等</text>
+    </button>
+    <button class="diff-btn hard" disabled>
+      <text class="diff-icon">🔒</text>
+      <text class="diff-label">困难</text>
+      <text class="diff-hint">敬请期待</text>
+    </button>
+  </view>
+
+  <!-- 其他入口 -->
+  <view class="menu-area">
+    <button class="menu-btn" bindtap="goLeaderboard">
+      <text class="menu-icon">🏆</text>
+      <text class="menu-text">排行榜</text>
+    </button>
+    <button class="menu-btn" bindtap="goHistory">
       <text class="menu-icon">📋</text>
       <text class="menu-text">历史记录</text>
+    </button>
+    <button class="menu-btn admin-btn" bindtap="goAdmin">
+      <text class="menu-icon">⚙️</text>
+      <text class="menu-text">管理</text>
     </button>
   </view>
 </view>

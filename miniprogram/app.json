@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/game/game",
-    "pages/history/history"
+    "pages/history/history",
+    "pages/leaderboard/leaderboard",
+    "pages/admin/admin"
   ],
   "cloud": true,
   "window": {

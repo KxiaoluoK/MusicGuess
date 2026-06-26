@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="stats-bar" wx:if="{{!loading}}">
+    <text>共 {{stats.total}} 题</text>
+    <text class="stats-detail">简单 {{stats.diff1 || 0}} | 中等 {{stats.diff2 || 0}} | 困难 {{stats.diff3 || 0}}</text>
+  </view>
+
+  <view class="tip-box">
+    <text>💡 添加题目请通过云开发控制台导入 JSONL 文件</text>
+  </view>
+
+  <view class="question-list" wx:if="{{!loading}}">
+    <view class="q-item" wx:for="{{questions}}" wx:key="_id">
+      <view class="q-meta">
+        <text class="q-type">{{item.type}}</text>
+        <text class="q-diff">难度{{item.difficulty}}</text>
+      </view>
+      <view class="q-body">{{item.questionText}}</view>
+      <view class="q-footer">
+        <text class="q-composer">{{item.composer}} — {{item.pieceName}}</text>
+        <button class="del-btn" bindtap="deleteQuestion" data-id="{{item._id}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
