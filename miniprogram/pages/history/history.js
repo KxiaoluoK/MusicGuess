@@ -1,7 +1,14 @@
 Page({
   data: {
     records: [],
-    loading: true
+    loading: true,
+    statusBarHeight: 0
+  },
+
+  onLoad() {
+    this.setData({
+      statusBarHeight: wx.getSystemInfoSync().statusBarHeight
+    });
   },
 
   onShow() {
