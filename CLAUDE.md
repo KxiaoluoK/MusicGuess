@@ -74,43 +74,22 @@ Clip preparation workflow:
 
 The script requires `ffmpeg`. Each clip is ~315KB (20s at 128kbps mono). Clips use libmp3lame re-encoding for consistent format.
 
-## Git 双仓库工作流 🚨 必须遵守
+## Git 工作流
 
-环境限制：WSL 无法连接 GitHub。代码编辑在 WSL，推送在 Windows Git Bash。
-
-```
-WSL 端 (/home/zachary/AI/project/MusicGuess)
-  → 编辑代码 + git commit
-  → rsync 同步文件到 Windows 路径
-
-Windows Git Bash (//wsl.localhost/Ubuntu/home/zachary/AI/project/MusicGuess)
-  → git push origin <分支>
-
-Windows DevTools 副本 (D:\4. Project\Music Guess\MusicGuess)
-  → git pull 同步最新代码
-  → 微信开发者工具打开这个路径
-```
-
-**每次提交的标准动作：**
+WSL 已配置代理可直连 GitHub，所有 Git 操作在 WSL 中一次完成。
 
 ```bash
-# 1. WSL：编辑代码 + 提交
+# 1. 编辑代码 + 提交
 cd /home/zachary/AI/project/MusicGuess
 git add -A
 git commit -m "描述"
-# 同步到 Windows 路径
-rsync -av /home/zachary/AI/project/MusicGuess/miniprogram/ "/mnt/d/4. Project/Music Guess/MusicGuess/miniprogram/"
-cp /home/zachary/AI/project/MusicGuess/cloudfunctions/getQuestions/index.js "/mnt/d/4. Project/Music Guess/MusicGuess/cloudfunctions/getQuestions/index.js"
 
-# 2. Windows Git Bash：推送
-cd "//wsl.localhost/Ubuntu/home/zachary/AI/project/MusicGuess"
+# 2. 推送
 git push origin <分支>
 
-# 3. Windows Git Bash：更新 DevTools 副本
-cd "D:\4. Project\Music Guess\MusicGuess"
-git fetch origin
-git checkout <分支>
-git pull origin <分支>
+# 3. 同步 Windows DevTools 副本（微信开发者工具打开这个路径）
+cd "/mnt/d/4. Project/Music Guess/MusicGuess"
+git fetch origin && git clean -fd && git reset --hard && git checkout <分支> && git pull origin <分支>
 ```
 
 ## Development Commands
