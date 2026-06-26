@@ -26,8 +26,8 @@ The project follows a strict 6-round iterative approach — each round must be v
 |-------|--------|------|
 | 0 | ✅ done | Content pipeline: download music → clip with ffmpeg → human screening |
 | 1 | ✅ done | Single-page hardcoded version: play → choose → score, no backend |
-| 2 | 🟡 in progress | Cloud dev: cloud DB + cloud functions + cloud storage + 4 question types + preload |
-| 2.5 | ⏳ planned | Expand to 25+ pieces (100+ questions), auto-download scripts, difficulty system |
+| 2 | ✅ done | Cloud dev: cloud DB + cloud functions + cloud storage + 4 question types + preload |
+| 2.5 | ✅ done | Expand to 15 pieces (180 questions), auto-download scripts, difficulty system |
 | 3 | ⏳ planned | Login + game history |
 | 4 | ⏳ planned | Leaderboard + daily challenge + difficulty levels |
 | 5 | ⏳ planned | Polish: UI/UX, expand to 50+ pieces, submit for review |
