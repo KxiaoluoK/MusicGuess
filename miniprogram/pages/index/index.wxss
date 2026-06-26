@@ -94,8 +94,8 @@
 }
 
 .diff-hint {
-  font-size: 18rpx;
-  color: #b8a088;
+  font-size: 22rpx;
+  color: #d4c0a0;
 }
 
 .menu-area {
