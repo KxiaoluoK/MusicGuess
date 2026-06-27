@@ -32,5 +32,9 @@
       <text class="menu-icon">📋</text>
       <text class="menu-text">历史记录</text>
     </button>
+    <button class="menu-btn" bindtap="goTest" style="opacity:0.4">
+      <text class="menu-icon">🔬</text>
+      <text class="menu-text">音频测试（临时）</text>
+    </button>
   </view>
 </view>

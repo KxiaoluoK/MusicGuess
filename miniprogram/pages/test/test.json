@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "音频测试",
+  "usingComponents": {
+    "audio-player": "/components/audio-player/audio-player"
+  }
+}

@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="title">🔬 题目音频测试</view>
+
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+
+  <view class="error-box" wx:if="{{error}}">
+    <text>❌ {{error}}</text>
+  </view>
+
+  <view class="content" wx:if="{{!loading && question}}">
+    <view class="info-row"><text class="label">题目ID：</text>{{question._id}}</view>
+    <view class="info-row"><text class="label">题型：</text>{{question.type}}</view>
+    <view class="info-row"><text class="label">题目：</text>{{question.questionText}}</view>
+    <view class="info-row"><text class="label">作曲家：</text>{{question.composer}}</view>
+    <view class="info-row"><text class="label">曲名：</text>{{question.pieceName}}</view>
+    <view class="info-row"><text class="label">难度：</text>{{question.difficulty}}</view>
+    <view class="info-row"><text class="label">云文件：</text>{{question.clipFileId}}</view>
+    <view class="info-row"><text class="label">临时URL：</text>{{clipUrl}}</view>
+
+    <view class="player-section">
+      <audio-player src="{{clipUrl}}" playTrigger="{{playTrigger}}" bind:error="onAudioError" />
+    </view>
+  </view>
+
+  <button class="back-btn" bindtap="goBack">返回</button>
+</view>
