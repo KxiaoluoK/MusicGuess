@@ -28,9 +28,10 @@ The project follows a strict 6-round iterative approach — each round must be v
 | 1 | ✅ done | Single-page hardcoded version: play → choose → score, no backend |
 | 2 | ✅ done | Cloud dev: cloud DB + cloud functions + cloud storage + 4 question types + preload |
 | 2.5 | ✅ done | Expand to 15 pieces (180 questions), auto-download scripts, difficulty system |
-| 3 | ⏳ planned | Login + game history |
-| 4 | ⏳ planned | Leaderboard + daily challenge + difficulty levels |
-| 5 | ⏳ planned | Polish: UI/UX, expand to 50+ pieces, submit for review |
+| 3 | ✅ done | Login + game history |
+| 4 | ✅ done | Leaderboard + difficulty levels + suggestions |
+| 5 | ✅ done | CSS design system + visual polish + privacy policy + launch prep |
+| 6 | ⏳ planned | Expand to 50+ pieces, continuous polish |
 
 **Key decisions**: no time limit, 1 replay allowed, 5 questions per game. 4 question types: composer / pieceName / era / instrument.
 
