@@ -15,11 +15,20 @@ Page({
       const res = await db.collection('questions').doc(QUESTION_ID).get();
       const q = res.data;
 
-      const tempRes = await wx.cloud.getTempFileURL({ fileList: [q.clipFileId] });
-      const tempUrl = tempRes.fileList[0].tempFileURL;
+      // 通过云函数获取临时链接（服务端 API，与游戏一致）
+      const cfRes = await wx.cloud.callFunction({
+        name: 'getTestUrl',
+        data: { fileId: q.clipFileId }
+      });
 
+      if (cfRes.result.code !== 0) {
+        this.setData({ error: '云函数获取URL失败: ' + JSON.stringify(cfRes.result), loading: false });
+        return;
+      }
+
+      const tempUrl = cfRes.result.tempUrl;
       if (!tempUrl) {
-        this.setData({ error: 'getTempFileURL 返回空', loading: false });
+        this.setData({ error: 'tempUrl 为空', loading: false });
         return;
       }
 
