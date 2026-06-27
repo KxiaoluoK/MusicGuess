@@ -162,8 +162,8 @@
         bindinput="onSuggestInput"
       />
 
-      <button class="suggest-submit-btn" bindtap="submitSuggestion" disabled="{{suggestCategoryIndex === -1 || suggestContent.trim() === ''}}">
-        <text>提交建议</text>
+      <button class="suggest-submit-btn" bindtap="submitSuggestion" disabled="{{!canSubmit || submitting}}">
+        <text>{{submitting ? '提交中...' : '提交建议'}}</text>
       </button>
     </view>
   </view>

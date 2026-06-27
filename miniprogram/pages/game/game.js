@@ -42,7 +42,10 @@ Page({
     showSuggestForm: false,
     suggestCategoryIndex: -1,
     suggestContent: '',
-    suggestCategories: ['🐛 题目有误', '🎵 音质问题', '💡 功能建议', '🎼 曲库建议', '📝 题型建议', '💬 其他反馈']
+    suggestCategories: ['🐛 题目有误', '🎵 音质问题', '💡 功能建议', '🎼 曲库建议', '📝 题型建议', '💬 其他反馈'],
+    suggestCategoryKeys: ['题目有误', '音质问题', '功能建议', '曲库建议', '题型建议', '其他反馈'],
+    canSubmit: false,
+    submitting: false
   },
 
   onLoad(options) {
@@ -240,22 +243,35 @@ Page({
   },
 
   onCategoryChange(e) {
-    this.setData({ suggestCategoryIndex: parseInt(e.detail.value) });
+    const idx = parseInt(e.detail.value);
+    this.setData({
+      suggestCategoryIndex: idx,
+      canSubmit: idx >= 0 && this.data.suggestContent.trim().length > 0
+    });
   },
 
   onSuggestInput(e) {
-    this.setData({ suggestContent: e.detail.value });
+    const content = e.detail.value;
+    this.setData({
+      suggestContent: content,
+      canSubmit: this.data.suggestCategoryIndex >= 0 && content.trim().length > 0
+    });
   },
 
   async submitSuggestion() {
-    const { suggestCategoryIndex, suggestCategories, suggestContent, difficulty, score, correctCount, totalQuestions, answers } = this.data;
-    if (suggestCategoryIndex === -1 || suggestContent.trim() === '') return;
+    const { suggestCategoryIndex, suggestCategoryKeys, suggestContent, difficulty, score, correctCount, totalQuestions, answers } = this.data;
+    if (suggestCategoryIndex === -1 || suggestContent.trim() === '') {
+      wx.showToast({ title: '请选择分类并填写内容', icon: 'none' });
+      return;
+    }
+
+    this.setData({ submitting: true });
 
     try {
       const db = wx.cloud.database();
       await db.collection('suggestions').add({
         data: {
-          category: suggestCategories[suggestCategoryIndex],
+          category: suggestCategoryKeys[suggestCategoryIndex],
           content: suggestContent.trim(),
           questionIds: answers.map(a => a.questionId),
           difficulty,
@@ -268,11 +284,14 @@ Page({
       this.setData({
         showSuggestForm: false,
         suggestCategoryIndex: -1,
-        suggestContent: ''
+        suggestContent: '',
+        canSubmit: false,
+        submitting: false
       });
     } catch (err) {
       console.error('提交建议失败:', err);
       wx.showToast({ title: '提交失败，请重试', icon: 'none' });
+      this.setData({ submitting: false });
     }
   },
 
