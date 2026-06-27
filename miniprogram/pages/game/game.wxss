@@ -485,6 +485,8 @@
 .bottom-actions {
   width: 100%;
   max-width: 560rpx;
+  display: flex;
+  gap: var(--space-md);
 }
 
 .home-btn,

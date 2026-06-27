@@ -20,7 +20,7 @@
 }
 
 .empty-text {
-  font-size: var(--space-lg);
+  font-size: 32rpx;
   color: var(--color-text-muted);
   margin-bottom: 12rpx;
 }
