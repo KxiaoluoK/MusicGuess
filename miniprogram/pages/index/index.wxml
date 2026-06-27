@@ -1,4 +1,18 @@
 <view class="container">
+  <!-- 隐私政策弹窗 -->
+  <view class="privacy-overlay" wx:if="{{showPrivacyModal}}">
+    <view class="privacy-modal">
+      <view class="privacy-modal-title">隐私政策</view>
+      <view class="privacy-modal-body">
+        为提供游戏记录和排行榜服务，本小程序需要获取您的微信 OpenID。您的数据仅用于本小程序，不会分享给第三方。详细信息请查看<text class="privacy-link" bindtap="goPrivacy">隐私政策</text>。
+      </view>
+      <view class="privacy-modal-actions">
+        <button class="privacy-btn disagree" bindtap="onDisagree">暂不同意</button>
+        <button class="privacy-btn agree" bindtap="agreePrivacy">同意</button>
+      </view>
+    </view>
+  </view>
+
   <view class="logo-area">
     <view class="logo-icon">🎻</view>
     <view class="logo-title">古典音乐猜曲</view>
@@ -33,4 +47,6 @@
       <text class="menu-text">历史记录</text>
     </button>
   </view>
+
+  <view class="privacy-footer" bindtap="goPrivacy">隐私政策</view>
 </view>
