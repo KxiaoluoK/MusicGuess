@@ -299,7 +299,7 @@ Page({
   onShareAppMessage() {
     const { score } = this.data;
     return {
-      title: `我在 MusicGuess 中获得了 ${score.percentage} 分！${score.title}`,
+      title: `我在 Tune Hunt 中获得了 ${score.percentage} 分！${score.title}`,
       path: '/pages/game/game'
     };
   },

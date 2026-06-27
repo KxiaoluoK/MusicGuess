@@ -9,7 +9,7 @@
   "cloud": true,
   "lazyCodeLoading": "requiredComponents",
   "window": {
-    "navigationBarTitleText": "MusicGuess",
+    "navigationBarTitleText": "Tune Hunt",
     "navigationBarBackgroundColor": "#1a0f0a",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#1a0f0a"

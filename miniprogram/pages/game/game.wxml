@@ -3,7 +3,7 @@
   <view class="screen start-screen" wx:if="{{gameState === 'start'}}">
     <view class="logo-area">
       <view class="logo-icon">🎻</view>
-      <view class="logo-title">MusicGuess</view>
+      <view class="logo-title">Tune Hunt</view>
       <view class="logo-subtitle">聆听古典，猜出答案</view>
       <view class="difficulty-tag" wx:if="{{difficultyLabel}}">{{difficultyLabel}}</view>
     </view>
