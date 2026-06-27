@@ -14,7 +14,4 @@ Page({
     wx.navigateTo({ url: '/pages/history/history' });
   },
 
-  goAdmin() {
-    wx.navigateTo({ url: '/pages/admin/admin' });
-  }
 });

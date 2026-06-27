@@ -3,8 +3,7 @@
     "pages/index/index",
     "pages/game/game",
     "pages/history/history",
-    "pages/leaderboard/leaderboard",
-    "pages/admin/admin"
+    "pages/leaderboard/leaderboard"
   ],
   "cloud": true,
   "window": {

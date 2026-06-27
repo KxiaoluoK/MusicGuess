@@ -32,9 +32,5 @@
       <text class="menu-icon">📋</text>
       <text class="menu-text">历史记录</text>
     </button>
-    <button class="menu-btn admin-btn" bindtap="goAdmin">
-      <text class="menu-icon">⚙️</text>
-      <text class="menu-text">管理</text>
-    </button>
   </view>
 </view>

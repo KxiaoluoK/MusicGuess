@@ -139,6 +139,3 @@
   font-size: 28rpx;
 }
 
-.admin-btn {
-  opacity: 0.5;
-}

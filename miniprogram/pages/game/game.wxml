@@ -132,9 +132,38 @@
         <text>📤 分享成绩</text>
       </button>
     </view>
-    <view class="result-actions">
+    <view class="result-actions bottom-actions">
+      <button class="suggest-btn {{showSuggestForm ? 'suggest-active' : ''}}" bindtap="toggleSuggestForm">
+        <text>💡 我有建议</text>
+      </button>
       <button class="home-btn" bindtap="goHome">
         <text>🏠 返回首页</text>
+      </button>
+    </view>
+
+    <!-- 建议表单 -->
+    <view class="suggest-form" wx:if="{{showSuggestForm}}">
+      <view class="suggest-form-title">告诉我们你的想法</view>
+
+      <picker mode="selector" range="{{suggestCategories}}" bindchange="onCategoryChange">
+        <view class="suggest-picker">
+          <text wx:if="{{suggestCategoryIndex === -1}}" class="picker-placeholder">请选择反馈分类</text>
+          <text wx:else class="picker-value">{{suggestCategories[suggestCategoryIndex]}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+
+      <textarea
+        class="suggest-textarea"
+        placeholder="请详细描述你的建议或发现的问题..."
+        placeholder-class="suggest-placeholder"
+        maxlength="500"
+        value="{{suggestContent}}"
+        bindinput="onSuggestInput"
+      />
+
+      <button class="suggest-submit-btn" bindtap="submitSuggestion" disabled="{{suggestCategoryIndex === -1 || suggestContent.trim() === ''}}">
+        <text>提交建议</text>
       </button>
     </view>
   </view>

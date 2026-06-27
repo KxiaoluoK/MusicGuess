@@ -36,7 +36,13 @@ Page({
     loading: false,
 
     // 结果详情
-    resultAnswers: []
+    resultAnswers: [],
+
+    // 建议反馈
+    showSuggestForm: false,
+    suggestCategoryIndex: -1,
+    suggestContent: '',
+    suggestCategories: ['🐛 题目有误', '🎵 音质问题', '💡 功能建议', '🎼 曲库建议', '📝 题型建议', '💬 其他反馈']
   },
 
   onLoad(options) {
@@ -226,6 +232,48 @@ Page({
   // ========== 返回首页 ==========
   goHome() {
     wx.navigateBack();
+  },
+
+  // ========== 建议反馈 ==========
+  toggleSuggestForm() {
+    this.setData({ showSuggestForm: !this.data.showSuggestForm });
+  },
+
+  onCategoryChange(e) {
+    this.setData({ suggestCategoryIndex: parseInt(e.detail.value) });
+  },
+
+  onSuggestInput(e) {
+    this.setData({ suggestContent: e.detail.value });
+  },
+
+  async submitSuggestion() {
+    const { suggestCategoryIndex, suggestCategories, suggestContent, difficulty, score, correctCount, totalQuestions, answers } = this.data;
+    if (suggestCategoryIndex === -1 || suggestContent.trim() === '') return;
+
+    try {
+      const db = wx.cloud.database();
+      await db.collection('suggestions').add({
+        data: {
+          category: suggestCategories[suggestCategoryIndex],
+          content: suggestContent.trim(),
+          questionIds: answers.map(a => a.questionId),
+          difficulty,
+          score: { correctCount, totalQuestions, percentage: score.percentage },
+          createdAt: db.serverDate()
+        }
+      });
+
+      wx.showToast({ title: '感谢你的建议！🙏', icon: 'none' });
+      this.setData({
+        showSuggestForm: false,
+        suggestCategoryIndex: -1,
+        suggestContent: ''
+      });
+    } catch (err) {
+      console.error('提交建议失败:', err);
+      wx.showToast({ title: '提交失败，请重试', icon: 'none' });
+    }
   },
 
   // ========== 分享 ==========
