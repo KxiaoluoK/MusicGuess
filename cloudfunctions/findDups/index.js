@@ -1,66 +1,72 @@
-// 扫描题库重复题（题型+曲子+片段相同，仅选项顺序不同）
+// 扫描/清理题库重复题（题型+曲子+片段相同，仅选项顺序不同）
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
+function getKey(q) {
+  return `${q.type}||${q.composer}||${q.pieceName}||${q.clipFileId}`;
+}
+
 exports.main = async (event) => {
-  const action = event.action || 'scan'; // scan | delete
+  const action = event.action || 'scan'; // scan | autoClean
 
   try {
     const res = await db.collection('questions').limit(500).get();
     const questions = res.data;
 
-    // 去重键：题型 + 作曲家 + 曲名 + 片段文件ID
     const groups = {};
     questions.forEach(q => {
-      const key = `${q.type}||${q.composer}||${q.pieceName}||${q.clipFileId}`;
+      const key = getKey(q);
       if (!groups[key]) groups[key] = [];
       groups[key].push(q);
     });
 
-    // 找出重复组（同一 key 下有多道题）
-    const dups = [];
+    // 找出重复组
+    const dupGroups = [];
     for (const [key, qs] of Object.entries(groups)) {
       if (qs.length > 1) {
-        // 检查选项是否仅顺序不同
-        const sortedOptions = qs.map(q => ({
-          _id: q._id,
-          options: [...q.options].sort().join('|||'),
-          rawOptions: q.options,
-          correctIndex: q.correctIndex
-        }));
-
-        const uniqueOptionSets = new Set(sortedOptions.map(s => s.options));
-        if (uniqueOptionSets.size < sortedOptions.length) {
-          // 有真正重复的（选项集合相同）
-          dups.push({
+        const sortedOptions = qs.map(q => [...q.options].sort().join('|||'));
+        const uniqueSets = new Set(sortedOptions);
+        // 选项集合数 < 题目数 = 有重复
+        if (uniqueSets.size < qs.length) {
+          dupGroups.push({
             key,
-            count: qs.length,
-            questions: qs.map(q => ({
-              _id: q._id,
-              type: q.type,
-              questionText: q.questionText,
-              composer: q.composer,
-              pieceName: q.pieceName,
-              options: q.options,
-              correctIndex: q.correctIndex,
-              difficulty: q.difficulty
-            }))
+            questionIds: qs.map(q => q._id)
           });
         }
       }
     }
 
-    if (action === 'delete' && event.deleteId) {
-      await db.collection('questions').doc(event.deleteId).remove();
-      return { code: 0, deleted: event.deleteId, duplicateCount: dups.length, duplicates: dups };
+    if (action === 'autoClean') {
+      const deleted = [];
+      for (const group of dupGroups) {
+        // 每组保留第一题，删其余
+        const toDelete = group.questionIds.slice(1);
+        for (const id of toDelete) {
+          await db.collection('questions').doc(id).remove();
+          deleted.push(id);
+        }
+      }
+
+      // 再扫一次确认
+      const res2 = await db.collection('questions').limit(500).get();
+      return {
+        code: 0,
+        action: 'autoClean',
+        before: questions.length,
+        after: res2.data.length,
+        deleted,
+        deletedCount: deleted.length
+      };
     }
 
+    // scan 模式
     return {
       code: 0,
+      action: 'scan',
       totalQuestions: questions.length,
-      duplicateCount: dups.length,
-      duplicates: dups
+      duplicateCount: dupGroups.length,
+      duplicates: dupGroups
     };
   } catch (err) {
     return { code: -1, message: err.message };
