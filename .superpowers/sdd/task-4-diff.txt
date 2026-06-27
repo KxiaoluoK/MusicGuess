@@ -1,0 +1,223 @@
+=== COMMITS ===
+dee48fa 样式：排行榜精致化 — 前三名光泽、Tab下划线、我排左边条
+=== STAT ===
+ miniprogram/pages/leaderboard/leaderboard.wxml |   2 +-
+ miniprogram/pages/leaderboard/leaderboard.wxss | 146 ++++++++++++++++++-------
+ 2 files changed, 107 insertions(+), 41 deletions(-)
+=== DIFF ===
+diff --git a/miniprogram/pages/leaderboard/leaderboard.wxml b/miniprogram/pages/leaderboard/leaderboard.wxml
+index 21c1e4b..a69a0f4 100644
+--- a/miniprogram/pages/leaderboard/leaderboard.wxml
++++ b/miniprogram/pages/leaderboard/leaderboard.wxml
+@@ -7,21 +7,21 @@
+     <view class="tab hard disabled">🔒 困难</view>
+   </view>
+ 
+   <view class="board-list" wx:if="{{!loading && board.length > 0}}">
+     <view class="board-header">
+       <text class="rank-col">排名</text>
+       <text class="score-col">均分</text>
+       <text class="games-col">场次</text>
+     </view>
+     <view
+-      class="board-item {{item._openid === myOpenid ? 'is-me' : ''}}"
++      class="board-item rank-{{index + 1}} {{item._openid === myOpenid ? 'is-me' : ''}}"
+       wx:for="{{board}}"
+       wx:key="_openid"
+     >
+       <view class="rank-col">
+         <text class="rank-num" wx:if="{{index > 2}}">{{index + 1}}</text>
+         <text class="rank-medal" wx:if="{{index === 0}}">🥇</text>
+         <text class="rank-medal" wx:elif="{{index === 1}}">🥈</text>
+         <text class="rank-medal" wx:elif="{{index === 2}}">🥉</text>
+       </view>
+       <view class="score-col">
+diff --git a/miniprogram/pages/leaderboard/leaderboard.wxss b/miniprogram/pages/leaderboard/leaderboard.wxss
+index fe1936d..bc36090 100644
+--- a/miniprogram/pages/leaderboard/leaderboard.wxss
++++ b/miniprogram/pages/leaderboard/leaderboard.wxss
+@@ -1,78 +1,144 @@
+ .container {
+   min-height: 100vh;
+-  background: linear-gradient(180deg, #1a0f0a 0%, #2c1810 40%, #1a0f0a 100%);
+-  padding: 32rpx;
++  background: linear-gradient(180deg, var(--color-bg) 0%, #2c1810 40%, var(--color-bg) 100%);
++  padding: var(--space-lg);
+   box-sizing: border-box;
+ }
+ 
++/* ===== 难度 Tab ===== */
+ .diff-tabs {
+   display: flex;
+   gap: 12rpx;
+   margin-bottom: 28rpx;
+ }
+ 
+ .tab {
+   flex: 1;
+   text-align: center;
+-  padding: 16rpx 0;
+-  font-size: 26rpx;
+-  color: #8b7355;
+-  background: rgba(139,90,43,0.08);
+-  border-radius: 16rpx;
+-  border: 1px solid rgba(139,90,43,0.15);
++  padding: 16rpx 0 12rpx;
++  font-size: var(--text-base);
++  color: var(--color-text-muted);
++  background: transparent;
++  border-radius: 0;
++  border-bottom: 4rpx solid transparent;
++  transition: color 0.2s, border-color 0.2s;
+ }
+ 
+ .tab.active {
+-  color: #f5e6d3;
+-  background: rgba(201,166,78,0.2);
+-  border-color: rgba(201,166,78,0.4);
++  color: var(--color-text);
++  border-bottom-color: var(--color-gold);
+ }
+ 
+ .tab.disabled {
+-  opacity: 0.4;
++  opacity: 0.35;
+ }
+ 
+-.empty-state {
+-  display: flex;
+-  flex-direction: column;
+-  align-items: center;
+-  justify-content: center;
+-  padding-top: 200rpx;
+-}
+-
+-.empty-icon { font-size: 80rpx; margin-bottom: 24rpx; }
+-.empty-text { font-size: 32rpx; color: #b8a088; margin-bottom: 12rpx; }
+-.empty-hint { font-size: 26rpx; color: #8b7355; }
+-.loading { text-align: center; padding-top: 200rpx; color: #b8a088; font-size: 28rpx; }
+-
++/* ===== 列表 ===== */
+ .board-header {
+   display: flex;
+-  padding: 16rpx 24rpx;
+-  font-size: 24rpx;
+-  color: #8b7355;
+-  border-bottom: 1px solid rgba(139,90,43,0.2);
++  padding: 16rpx var(--space-md);
++  font-size: var(--text-sm);
++  color: var(--color-text-muted);
++  border-bottom: 1rpx solid rgba(139, 90, 43, 0.25);
+   margin-bottom: 12rpx;
+ }
+ 
+ .board-item {
+   display: flex;
+   align-items: center;
+-  padding: 24rpx;
+-  border-radius: 16rpx;
++  padding: var(--space-md);
++  border-radius: var(--radius-md);
+   margin-bottom: 12rpx;
+-  background: rgba(139,90,43,0.08);
++  background: var(--color-surface);
++  border: 1rpx solid rgba(139, 90, 43, 0.12);
++  transition: background 0.15s;
++}
++
++/* 前三名光泽 */
++.board-item.rank-1 {
++  background: linear-gradient(135deg, rgba(201, 166, 78, 0.18), rgba(201, 166, 78, 0.06));
++  border-color: rgba(201, 166, 78, 0.35);
++}
++
++.board-item.rank-2 {
++  background: linear-gradient(135deg, rgba(180, 180, 190, 0.14), rgba(180, 180, 190, 0.04));
++  border-color: rgba(180, 180, 190, 0.25);
++}
++
++.board-item.rank-3 {
++  background: linear-gradient(135deg, rgba(200, 150, 100, 0.14), rgba(200, 150, 100, 0.04));
++  border-color: rgba(200, 150, 100, 0.25);
+ }
+ 
++/* 我的排名 */
+ .board-item.is-me {
+-  background: rgba(201,166,78,0.15);
+-  border: 1px solid rgba(201,166,78,0.3);
++  background: var(--color-gold-dim);
++  border: 1rpx solid rgba(201, 166, 78, 0.35);
++  border-left: 6rpx solid var(--color-gold);
++}
++
++.rank-col {
++  width: 80rpx;
++  text-align: center;
++  font-size: 30rpx;
++  color: var(--color-gold);
+ }
+ 
+-.rank-col { width: 80rpx; text-align: center; font-size: 30rpx; color: #c9a64e; }
+-.rank-medal { font-size: 36rpx; }
++.rank-medal {
++  font-size: 44rpx;
++}
+ 
+-.score-col { flex: 1; display: flex; flex-direction: column; }
+-.avg-score { font-size: 36rpx; font-weight: 700; color: #f5e6d3; }
+-.best-score { font-size: 22rpx; color: #8b7355; }
++.score-col {
++  flex: 1;
++  display: flex;
++  flex-direction: column;
++}
+ 
+-.games-col { font-size: 26rpx; color: #b8a088; text-align: right; }
++.avg-score {
++  font-size: 36rpx;
++  font-weight: 700;
++  color: var(--color-text);
++}
++
++.best-score {
++  font-size: var(--text-xs);
++  color: var(--color-text-muted);
++}
++
++.games-col {
++  font-size: var(--text-base);
++  color: var(--color-text-muted);
++  text-align: right;
++}
++
++/* ===== 空状态 ===== */
++.empty-state {
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  justify-content: center;
++  padding-top: 200rpx;
++}
++
++.empty-icon {
++  font-size: 80rpx;
++  margin-bottom: var(--space-md);
++}
++
++.empty-text {
++  font-size: var(--space-lg);
++  color: var(--color-text-muted);
++  margin-bottom: 12rpx;
++}
++
++.empty-hint {
++  font-size: var(--text-base);
++  color: var(--color-text-muted);
++}
++
++.loading {
++  text-align: center;
++  padding-top: 200rpx;
++  color: var(--color-text-muted);
++  font-size: var(--text-md);
++}

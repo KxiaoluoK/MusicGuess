@@ -1,0 +1,78 @@
+### Task 1: CSS 变量体系 (app.wxss)
+
+**Files:**
+- Modify: `miniprogram/app.wxss`
+
+**Interfaces:**
+- Produces: CSS 变量供所有页面使用
+
+- [ ] **Step 1: 在 app.wxss 的 page 选择器中添加 CSS 变量**
+
+将现有 `page` 样式块替换为：
+
+```css
+page {
+  /* 色板 */
+  --color-bg: #1a0f0a;
+  --color-surface: rgba(139, 90, 43, 0.1);
+  --color-surface-hover: rgba(139, 90, 43, 0.18);
+  --color-gold: #c9a64e;
+  --color-gold-dim: rgba(201, 166, 78, 0.2);
+  --color-text: #f5e6d3;
+  --color-text-secondary: #d4b896;
+  --color-text-muted: #8b7355;
+  --color-success: #6b8e23;
+  --color-danger: #cd5c5c;
+  --color-silver: rgba(180, 180, 190, 0.2);
+  --color-bronze: rgba(200, 150, 100, 0.2);
+
+  /* 圆角 */
+  --radius-sm: 12rpx;
+  --radius-md: 20rpx;
+  --radius-lg: 24rpx;
+
+  /* 间距 */
+  --space-xs: 8rpx;
+  --space-sm: 16rpx;
+  --space-md: 24rpx;
+  --space-lg: 32rpx;
+  --space-xl: 48rpx;
+
+  /* 字号 */
+  --text-xs: 22rpx;
+  --text-sm: 24rpx;
+  --text-base: 26rpx;
+  --text-md: 28rpx;
+  --text-lg: 34rpx;
+  --text-xl: 40rpx;
+  --text-2xl: 48rpx;
+  --text-3xl: 80rpx;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+button::after {
+  border: none;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+```
+
+- [ ] **Step 2: 提交**
+
+```bash
+git add miniprogram/app.wxss
+git commit -m "样式：app.wxss 建立 CSS 变量体系（色板/圆角/间距/字号）"
+```
+
+---

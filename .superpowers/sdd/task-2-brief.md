@@ -1,0 +1,195 @@
+### Task 2: 首页精致化 (index)
+
+**Files:**
+- Modify: `miniprogram/pages/index/index.wxss`
+
+**Interfaces:**
+- Consumes: CSS 变量体系 (Task 1)
+
+- [ ] **Step 1: 更新 index.wxss**
+
+将 `miniprogram/pages/index/index.wxss` 全量替换为：
+
+```css
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--color-bg) 0%, #2c1810 40%, var(--color-bg) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx var(--space-lg);
+  box-sizing: border-box;
+}
+
+/* ===== Logo 区 ===== */
+.logo-area {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.logo-icon {
+  font-size: 100rpx;
+  margin-bottom: var(--space-sm);
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 五线谱装饰线 */
+.logo-icon::after {
+  content: '';
+  display: block;
+  width: 120rpx;
+  height: 2rpx;
+  margin: 12rpx auto 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-gold-dim) 20%,
+    var(--color-gold-dim) 80%,
+    transparent 100%
+  );
+  box-shadow:
+    0 8rpx 0 var(--color-gold-dim),
+    0 16rpx 0 var(--color-gold-dim);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12rpx); }
+}
+
+.logo-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  letter-spacing: 4rpx;
+}
+
+.logo-subtitle {
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+}
+
+/* ===== 难度选择 ===== */
+.section-title {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  margin-bottom: 20rpx;
+}
+
+.difficulty-area {
+  display: flex;
+  gap: 20rpx;
+  width: 100%;
+  max-width: 560rpx;
+  margin-bottom: 40rpx;
+}
+
+.diff-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  height: 140rpx;
+  border-radius: var(--radius-lg);
+  border: none;
+  position: relative;
+  transition: transform 0.15s;
+}
+
+.diff-btn:active {
+  transform: scale(0.96);
+}
+
+.diff-btn.easy {
+  background: linear-gradient(135deg, #7a9e2f 0%, #5a7a1f 100%);
+  box-shadow: 0 6rpx 24rpx rgba(107, 142, 35, 0.35);
+}
+
+.diff-btn.medium {
+  background: linear-gradient(135deg, #d4943f 0%, #9a7518 100%);
+  box-shadow: 0 6rpx 24rpx rgba(205, 133, 63, 0.35);
+}
+
+.diff-btn.hard {
+  background: rgba(180, 140, 100, 0.15);
+  border: 1rpx solid rgba(180, 140, 100, 0.3);
+}
+
+.diff-btn.hard .diff-icon {
+  font-size: var(--text-md);
+}
+
+.diff-btn.hard .diff-label {
+  font-size: var(--text-sm);
+}
+
+.diff-btn.hard .diff-hint {
+  font-size: 20rpx;
+}
+
+.diff-icon {
+  font-size: 36rpx;
+}
+
+.diff-label {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.diff-btn.hard .diff-label {
+  color: #c0a880;
+}
+
+.diff-hint {
+  font-size: var(--text-xs);
+  color: #d4c0a0;
+}
+
+/* ===== 菜单区 ===== */
+.menu-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 480rpx;
+}
+
+.menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  height: 88rpx;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1rpx solid rgba(139, 90, 43, 0.15);
+  color: var(--color-text-secondary);
+  font-size: var(--text-md);
+  transition: background 0.15s;
+}
+
+.menu-btn:active {
+  background: var(--color-surface-hover);
+}
+
+.menu-icon {
+  font-size: var(--space-lg);
+}
+
+.menu-text {
+  font-size: var(--text-md);
+}
+```
+
+- [ ] **Step 2: 提交**
+
+```bash
+git add miniprogram/pages/index/index.wxss
+git commit -m "样式：首页精致化 — 五线谱装饰、按钮饱和度、间距统一"
+```
+
+---

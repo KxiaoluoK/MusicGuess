@@ -1,3 +1,16 @@
+### Task 4: 排行榜精致化 (leaderboard)
+
+**Files:**
+- Modify: `miniprogram/pages/leaderboard/leaderboard.wxss`
+
+**Interfaces:**
+- Consumes: CSS 变量体系 (Task 1)
+
+- [ ] **Step 1: 更新 leaderboard.wxss**
+
+将 `miniprogram/pages/leaderboard/leaderboard.wxss` 全量替换为：
+
+```css
 .container {
   min-height: 100vh;
   background: linear-gradient(180deg, var(--color-bg) 0%, #2c1810 40%, var(--color-bg) 100%);
@@ -126,7 +139,7 @@
 }
 
 .empty-text {
-  font-size: 32rpx;
+  font-size: var(--space-lg);
   color: var(--color-text-muted);
   margin-bottom: 12rpx;
 }
@@ -142,3 +155,34 @@
   color: var(--color-text-muted);
   font-size: var(--text-md);
 }
+```
+
+- [ ] **Step 2: 更新 leaderboard.wxml 添加排名 class**
+
+修改 `miniprogram/pages/leaderboard/leaderboard.wxml` 第 17 行，给 `board-item` 加上排名类名：
+
+```html
+<view
+  class="board-item rank-{{index + 1}} {{item._openid === myOpenid ? 'is-me' : ''}}"
+  wx:for="{{board}}"
+  wx:key="_openid"
+>
+```
+
+替换原来的：
+```html
+<view
+  class="board-item {{item._openid === myOpenid ? 'is-me' : ''}}"
+  wx:for="{{board}}"
+  wx:key="_openid"
+>
+```
+
+- [ ] **Step 3: 提交**
+
+```bash
+git add miniprogram/pages/leaderboard/
+git commit -m "样式：排行榜精致化 — 前三名光泽、Tab下划线、我排左边条"
+```
+
+---
