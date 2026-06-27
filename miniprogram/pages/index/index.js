@@ -14,8 +14,4 @@ Page({
     wx.navigateTo({ url: '/pages/history/history' });
   },
 
-  goTest() {
-    wx.navigateTo({ url: '/pages/test/test' });
-  },
-
 });
