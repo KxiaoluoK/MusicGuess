@@ -8,7 +8,7 @@
   ],
   "cloud": true,
   "window": {
-    "navigationBarTitleText": "古典音乐猜曲",
+    "navigationBarTitleText": "MusicGuess",
     "navigationBarBackgroundColor": "#1a0f0a",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#1a0f0a"
