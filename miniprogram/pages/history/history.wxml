@@ -3,6 +3,7 @@
     <view class="empty-icon">📝</view>
     <view class="empty-text">还没有游戏记录</view>
     <view class="empty-hint">去答一局题吧！</view>
+    <button class="empty-btn" bindtap="goGame">开始答题</button>
   </view>
 
   <view class="record-list" wx:if="{{records.length > 0}}">
@@ -16,7 +17,7 @@
           <text wx:elif="{{item.difficulty === 2}}">🔥 中等</text>
           <text wx:else>🔒 困难</text>
         </view>
-        <view class="record-date">{{item.createdAt}}</view>
+        <view class="record-date">{{item.formattedDate}}</view>
       </view>
       <view class="record-score">
         <text class="score-num">{{item.score.correctCount}}/{{item.score.totalQuestions}}</text>

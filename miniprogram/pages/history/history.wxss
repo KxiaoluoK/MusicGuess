@@ -1,10 +1,11 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #1a0f0a 0%, #2c1810 40%, #1a0f0a 100%);
-  padding: 32rpx;
+  background: linear-gradient(180deg, var(--color-bg) 0%, #2c1810 40%, var(--color-bg) 100%);
+  padding: var(--space-lg);
   box-sizing: border-box;
 }
 
+/* ===== 空状态 ===== */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -14,28 +15,45 @@
 }
 
 .empty-icon {
-  font-size: 80rpx;
-  margin-bottom: 24rpx;
+  font-size: 100rpx;
+  margin-bottom: var(--space-md);
 }
 
 .empty-text {
-  font-size: 32rpx;
-  color: #b8a088;
+  font-size: var(--space-lg);
+  color: var(--color-text-muted);
   margin-bottom: 12rpx;
 }
 
 .empty-hint {
-  font-size: 26rpx;
-  color: #8b7355;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
 }
 
+.empty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  padding: 0 var(--space-xl);
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #b8860b 0%, #8b6914 100%);
+  color: var(--color-text);
+  font-size: var(--text-md);
+  font-weight: 600;
+  border: none;
+}
+
+/* ===== 加载 ===== */
 .loading {
   text-align: center;
   padding-top: 200rpx;
-  color: #b8a088;
-  font-size: 28rpx;
+  color: var(--color-text-muted);
+  font-size: var(--text-md);
 }
 
+/* ===== 列表 ===== */
 .record-list {
   display: flex;
   flex-direction: column;
@@ -43,57 +61,58 @@
 }
 
 .record-item {
-  background: rgba(139, 90, 43, 0.12);
-  border-radius: 20rpx;
-  padding: 28rpx 32rpx;
-  border: 1px solid rgba(139, 90, 43, 0.2);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 28rpx var(--space-lg);
+  border: 1rpx solid rgba(139, 90, 43, 0.15);
 }
 
 .record-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16rpx;
+  margin-bottom: var(--space-sm);
 }
 
 .record-stars {
-  font-size: 28rpx;
+  font-size: var(--text-md);
 }
 
 .record-diff {
-  flex: 1;
-  font-size: 22rpx;
-  color: #c9a64e;
-  padding: 2rpx 16rpx;
-  background: rgba(201,166,78,0.1);
-  border-radius: 10rpx;
+  font-size: var(--text-xs);
+  color: var(--color-gold);
+  padding: 2rpx var(--space-sm);
+  background: var(--color-gold-dim);
+  border-radius: var(--radius-sm);
+  margin: 0 var(--space-sm);
 }
 
 .record-date {
-  font-size: 24rpx;
-  color: #8b7355;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
 }
 
 .record-score {
   display: flex;
   align-items: baseline;
   gap: 12rpx;
-  margin-bottom: 8rpx;
+  margin-bottom: var(--space-xs);
 }
 
 .score-num {
-  font-size: 40rpx;
+  font-size: var(--text-xl);
   font-weight: 700;
-  color: #c9a64e;
+  color: var(--color-gold);
 }
 
 .score-pct {
-  font-size: 26rpx;
-  color: #b8a088;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
 }
 
 .record-eval {
-  font-size: 26rpx;
-  color: #d4b896;
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
   line-height: 1.6;
 }
