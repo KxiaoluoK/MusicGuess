@@ -58,10 +58,7 @@
         wx:for="{{currentQuestion.options}}"
         wx:key="*this"
         wx:for-index="idx"
-        class="option-card
-          {{gameState === 'feedback' && idx === currentQuestion.correctIndex ? 'option-correct' : ''}}
-          {{gameState === 'feedback' && idx === selectedIndex && idx !== currentQuestion.correctIndex ? 'option-wrong' : ''}}
-          {{gameState === 'feedback' && idx !== selectedIndex && idx !== currentQuestion.correctIndex ? 'option-dimmed' : ''}}"
+        class="option-card {{gameState === 'feedback' && idx === currentQuestion.correctIndex ? 'option-correct' : ''}}{{gameState === 'feedback' && idx === selectedIndex && idx !== currentQuestion.correctIndex ? 'option-wrong' : ''}}{{gameState === 'feedback' && idx !== selectedIndex && idx !== currentQuestion.correctIndex ? 'option-dimmed' : ''}}"
         data-index="{{idx}}"
         bindtap="selectOption"
       >
