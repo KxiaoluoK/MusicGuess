@@ -447,10 +447,14 @@
   display: flex;
   gap: var(--space-md);
   padding-top: var(--space-sm);
+  width: 100%;
+  max-width: 560rpx;
 }
 
 .restart-btn,
-.share-btn {
+.share-btn,
+.home-btn,
+.suggest-btn {
   flex: 1;
   height: 100rpx;
   display: flex;
@@ -464,7 +468,9 @@
 }
 
 .restart-btn:active,
-.share-btn:active {
+.share-btn:active,
+.home-btn:active,
+.suggest-btn:active {
   transform: scale(0.96);
 }
 
@@ -487,24 +493,6 @@
   max-width: 560rpx;
   display: flex;
   gap: var(--space-md);
-}
-
-.home-btn,
-.suggest-btn {
-  flex: 1;
-  height: 80rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  font-size: var(--text-base);
-  border: none;
-  transition: background 0.15s, transform 0.15s;
-}
-
-.home-btn:active,
-.suggest-btn:active {
-  transform: scale(0.97);
 }
 
 .home-btn {

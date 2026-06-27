@@ -41,15 +41,22 @@ exports.main = async (event) => {
     const selected = [];
     const usedIds = new Set();
     const usedClipIds = new Set();
+    const usedPieces = new Set();  // 避免重复曲子
 
-    // 2. 每种题型至少选 1 题
+    function pieceKey(q) { return `${q.composer}||${q.pieceName}`; }
+
+    // 2. 每种题型至少选 1 题（优先不同曲子）
     for (const type of types) {
       const pool = groups[type].filter(q => !usedIds.has(q._id));
-      const picked = shuffle(pool).slice(0, 1);
+      // 优先选没出现过的曲子
+      const freshPiece = pool.filter(q => !usedPieces.has(pieceKey(q)));
+      const pickFrom = freshPiece.length > 0 ? freshPiece : pool;
+      const picked = shuffle(pickFrom).slice(0, 1);
       picked.forEach(q => {
         selected.push(q);
         usedIds.add(q._id);
         usedClipIds.add(q.clipFileId);
+        usedPieces.add(pieceKey(q));
       });
     }
 
@@ -58,17 +65,20 @@ exports.main = async (event) => {
     const remaining = bufferSize - selected.length;
     if (remaining > 0) {
       const restPool = questions.filter(q => !usedIds.has(q._id));
-      // 优先不同 clip
-      const fresh = restPool.filter(q => !usedClipIds.has(q.clipFileId));
-      const reuse = restPool.filter(q => usedClipIds.has(q.clipFileId));
+      // 优先级：不同曲子 > 不同片段 > 重用
+      const freshPiece = restPool.filter(q => !usedPieces.has(pieceKey(q)));
+      const freshClip = restPool.filter(q => usedPieces.has(pieceKey(q)) && !usedClipIds.has(q.clipFileId));
+      const reuse = restPool.filter(q => usedPieces.has(pieceKey(q)) && usedClipIds.has(q.clipFileId));
       const extra = [
-        ...shuffle(fresh).slice(0, remaining),
-        ...shuffle(reuse).slice(0, Math.max(0, remaining - fresh.length))
+        ...shuffle(freshPiece).slice(0, remaining),
+        ...shuffle(freshClip).slice(0, Math.max(0, remaining - freshPiece.length)),
+        ...shuffle(reuse).slice(0, Math.max(0, remaining - freshPiece.length - freshClip.length))
       ];
       extra.forEach(q => {
         selected.push(q);
         usedIds.add(q._id);
         usedClipIds.add(q.clipFileId);
+        usedPieces.add(pieceKey(q));
       });
     }
 
