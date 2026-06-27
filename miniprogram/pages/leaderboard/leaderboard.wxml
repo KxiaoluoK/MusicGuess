@@ -14,7 +14,7 @@
       <text class="games-col">场次</text>
     </view>
     <view
-      class="board-item {{item._openid === myOpenid ? 'is-me' : ''}}"
+      class="board-item rank-{{index + 1}} {{item._openid === myOpenid ? 'is-me' : ''}}"
       wx:for="{{board}}"
       wx:key="_openid"
     >
