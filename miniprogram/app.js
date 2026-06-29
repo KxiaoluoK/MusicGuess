@@ -13,7 +13,7 @@ App({
     }
 
     await this._doLogin();
-    console.log('🎵 MusicGuess 启动');
+    console.log('🎵 Tune Hunt 启动');
   },
 
   async _doLogin() {
