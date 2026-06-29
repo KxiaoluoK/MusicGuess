@@ -14,7 +14,7 @@
     <view class="section-title">2. 信息如何使用</view>
     <view class="section-text">
       - OpenID 用于识别您的游戏记录和排行榜排名<text class="br"></text>
-      - 您的答题成绩会出现在排行榜中，其他用户可看到您的匿名排名
+      - 您的微信头像和答题成绩会出现在排行榜中
     </view>
   </view>
 

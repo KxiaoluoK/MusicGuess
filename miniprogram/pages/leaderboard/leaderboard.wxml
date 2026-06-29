@@ -10,6 +10,7 @@
   <view class="board-list" wx:if="{{!loading && board.length > 0}}">
     <view class="board-header">
       <text class="rank-col">排名</text>
+      <text class="avatar-col">头像</text>
       <text class="score-col">均分</text>
       <text class="games-col">场次</text>
     </view>
@@ -23,6 +24,9 @@
         <text class="rank-medal" wx:if="{{index === 0}}">🥇</text>
         <text class="rank-medal" wx:elif="{{index === 1}}">🥈</text>
         <text class="rank-medal" wx:elif="{{index === 2}}">🥉</text>
+      </view>
+      <view class="avatar-col">
+        <open-data type="userAvatarUrl" openid="{{item._openid}}"></open-data>
       </view>
       <view class="score-col">
         <text class="avg-score">{{item.avgScore}}%</text>

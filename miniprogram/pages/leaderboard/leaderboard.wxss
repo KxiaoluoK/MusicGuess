@@ -105,6 +105,20 @@
   color: var(--color-text-muted);
 }
 
+.avatar-col {
+  width: 80rpx;
+  text-align: center;
+}
+
+.avatar-col open-data {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 30rpx;
+  overflow: hidden;
+  display: block;
+  margin: 0 auto;
+}
+
 .games-col {
   font-size: var(--text-base);
   color: var(--color-text-muted);
